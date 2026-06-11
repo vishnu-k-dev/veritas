@@ -4,7 +4,6 @@
     "devCommand": "npm run dev",
     "installCommand": "npm install",
     "rewrites": [
-        { "source": "/verify/:id", "destination": "https://VERITAS-api-production.up.railway.app/api/verify/:id" },
         { "source": "/(.*)", "destination": "/index.html" }
     ],
     "headers": [
@@ -12,12 +11,6 @@
             "source": "/assets/(.*)",
             "headers": [
                 { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-            ]
-        },
-        {
-            "source": "/hero-frames/(.*)",
-            "headers": [
-                { "key": "Cache-Control", "value": "public, max-age=604800" }
             ]
         },
         {
