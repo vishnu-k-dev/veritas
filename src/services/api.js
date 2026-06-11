@@ -182,7 +182,7 @@ export async function fetchScreening(id) {
 
 // Health check
 export async function checkHealth() {
-    return apiRequest('/api/health');
+    return apiRequest('/api/ping');
 }
 
 // ============================================

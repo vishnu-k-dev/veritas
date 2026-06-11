@@ -265,7 +265,7 @@ export default function App() {
   useEffect(() => {
     const API_BASE = import.meta.env.VITE_API_URL || '';
     if (API_BASE) {
-      fetch(`${API_BASE}/api/health`).catch(() => {});
+      fetch(`${API_BASE}/api/ping`).catch(() => {});
     }
   }, []);
 
