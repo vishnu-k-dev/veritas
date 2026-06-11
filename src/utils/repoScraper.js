@@ -23,7 +23,11 @@ function parseGitHubUrl(url) {
  */
 export async function scrapeRepo(repoUrl) {
     const { owner, repo } = parseGitHubUrl(repoUrl);
-    const headers = { Accept: 'application/vnd.github.v3+json' };
+    const token = import.meta.env?.VITE_GITHUB_TOKEN
+    const headers = {
+        Accept: 'application/vnd.github.v3+json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
 
     const base = `${GITHUB_API}/repos/${owner}/${repo}`;
 
