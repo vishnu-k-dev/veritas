@@ -1,93 +1,142 @@
-# VERITAS — Evidence-Based AI Examination System
+# VERITAS
 
-> Paste a public GitHub repository. VERITAS reads your code, your commits, your decisions — then examines you on what you actually built.
+> **The examination that knows what you built.**
 
-**No login. No question banks. No proctoring theatre.**  
-The candidate's own evidence is the exam.
+Paste a public GitHub repository. VERITAS reads your commits, your file structure, your architectural decisions — then conducts a five-question written examination on what you *actually* built. No question bank. No generic MCQs. No way to prepare except by having genuinely built the project.
+
+Built for **Far Away 2026** · Theme: *Examinations — Reimagine the future of examinations with secure, fair and intelligent solutions.*
 
 ---
 
 ## The Problem
 
-Anyone can claim "full-stack developer" on a CV. Institutions have no way to verify it.  
-Traditional exams test memory. VERITAS examines authorship.
+The credibility infrastructure for technical skills is broken at every level:
 
-| Old way | VERITAS |
-|---|---|
-| Generic MCQs any LLM can answer | Questions generated from *your actual commits* |
-| Self-reported skills | GitHub API reads your real codebase |
-| Easy to fake | Proctored — paste blocked, tab switches logged |
-| Flat pass/fail | 3-dimensional score: Authenticity · Ownership · Competency |
+- A developer lists "built a full-stack e-commerce platform" — it's a YouTube tutorial they followed
+- A student submits a final-year project — it's a GitHub repo they found and barely modified  
+- A candidate says "I know React deeply" — they memorised answers from interview prep sites
 
----
+Traditional solutions fail because they ask generic questions that any LLM can answer and any determined person can memorise. The question bank *is* the vulnerability.
 
-## Live Demo
-
-```
-http://localhost:5174/exam
-```
-
-1. Enter your name
-2. Paste any public GitHub repo URL
-3. VERITAS reads your code and generates 5 evidence-based questions
-4. Answer in your own words (paste is blocked, tab switches are recorded)
-5. Receive a grade card with per-question breakdown + integrity report
+**VERITAS eliminates the question bank entirely.** Your own repository is the exam paper.
 
 ---
 
 ## How It Works
 
 ```
-GitHub Repo URL
-      ↓
-GitHub REST API (7 calls, unauthenticated)
-  → metadata · commits · languages · file tree · README · package.json
-      ↓
-Repo Analysis Engine (zero LLM — pure rule-based)
-  → tech stack · architecture · system type
-      ↓
-Groq / Llama-3.3-70b — Key 2 (Question Generation)
-  → 5 evidence-based questions, each traced to a commit or file
-      ↓
-Proctored Examination
-  → paste blocked · tab switches logged · typing velocity analysed
-      ↓
-Groq / Llama-3.3-70b — Key 3 (Answer Analysis)
-  → authenticity · depth · specificity · communication · consistency
-      ↓
-Groq / Llama-3.3-70b — Key 4 (Score Computation)
-  → composite score · verdict (pass / hold / fail)
-      ↓
-Grade Card + Integrity Report
-  → Authenticity / Ownership / Competency · per-question breakdown · verification ID
+┌─────────────────────────────────────────────────────────────────────┐
+│                        VERITAS PIPELINE                             │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  GitHub Repo URL                                                    │
+│       │                                                             │
+│       ▼                                                             │
+│  GitHub REST API  ──── 7 calls, unauthenticated ────────────────── │
+│  (metadata · commits · languages · file tree · README · package)   │
+│       │                                                             │
+│       ▼                                                             │
+│  Deterministic Repo Analysis  ──── ZERO LLM COST ──────────────── │
+│  (framework detect · architecture classify · tech stack extract)   │
+│       │                                                             │
+│       ▼                                                             │
+│  Groq / Llama-3.3-70b  ──── Key 2: Question Generation ─────────  │
+│  5 questions, each citing a specific commit or design decision      │
+│       │                                                             │
+│       ▼                                                             │
+│  Proctored Written Examination                                      │
+│  (paste blocked · tab switches logged · typing velocity analysed)  │
+│       │                                                             │
+│  Per answer:                                                        │
+│  Groq / Llama-3.3-70b  ──── Key 3: Answer Analysis ─────────────  │
+│  Groq / Llama-3.3-70b  ──── Key 4: Score Computation ───────────  │
+│       │                                                             │
+│       ▼                                                             │
+│  Grade Card + Integrity Report + Shareable Certificate             │
+│  /verify/:id  ──── public URL, no login required ───────────────  │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Scoring
+## What Makes This Different
 
-Five dimensions, no artificial floor — scores reflect reality:
-
-| Dimension | Weight | What it measures |
-|---|---|---|
-| Authenticity | 45% | First-hand knowledge — files, errors, decisions cited |
-| Depth | 25% | Reasoning depth — WHY, not just WHAT |
-| Specificity | 15% | Concrete references — numbers, paths, names |
-| Communication | 10% | Clarity and structure |
-| Consistency | 5% | Coherence across all answers |
-
-**Verdict:** Pass ≥ 60 · Hold 35–59 · Fail < 35
+| Dimension | Traditional Exam | AI Question Bank | VERITAS |
+|---|---|---|---|
+| Question source | Static bank | AI-generated generic | Candidate's own commits |
+| Preparable? | Yes — memorise | Yes — LLM can answer | No — specific to your code |
+| Leakable? | Yes | Yes | No |
+| Proctoring | Human invigilator | None | Pure-JS, no extensions |
+| Score honesty | Pass/fail binary | Inflated | Weighted 5-dimension, no floor |
+| Proof of authorship | None | None | Verification ID + public URL |
+| Cost per exam | High | Medium | ~₹0.50 in API credits |
 
 ---
 
-## Proctoring
+## Scoring Methodology
 
-- **Paste blocked** — `paste` event intercepted; warning shown
-- **Tab switch detected** — `visibilitychange` triggers full-screen overlay, strike counted
-- **Copy tracking** — every `copy` event on the page logged
-- **Typing velocity** — answers appearing faster than 200 WPM flagged as anomalous
-- **Right-click disabled** on question card and answer area
-- **Integrity report** included in final grade card
+Five dimensions, weighted by predictive validity for authorship confidence:
+
+| Dimension | Weight | Signals examined |
+|---|---|---|
+| **Authenticity** | 45% | Files named, errors cited, config values referenced, commit SHAs |
+| **Depth** | 25% | WHY decisions were made, tradeoffs considered, alternatives ruled out |
+| **Specificity** | 15% | Numbers, paths, version pins, actual error messages |
+| **Communication** | 10% | Clarity, structure, logical flow |
+| **Consistency** | 5% | Coherence across all five answers |
+
+```
+composite = auth×0.45 + depth×0.25 + spec×0.15 + comm×0.10 + cons×0.05
+
+VERIFIED      ≥ 70   — candidate demonstrably built this
+CONDITIONAL   50–69  — partial ownership confirmed
+NEEDS REVIEW  < 50   — insufficient evidence of authorship
+```
+
+**No artificial score floor.** A one-word answer ("ok", "yes") scores 5–10 across all dimensions.
+
+---
+
+## Proctoring — No Extensions Required
+
+Implemented entirely in the browser with standard Web APIs:
+
+| Signal | Implementation | Effect |
+|---|---|---|
+| Tab switch | `visibilitychange` event | Full-screen overlay + strike counter |
+| Paste attempt | `paste` event → `preventDefault()` | Blocked + warning toast |
+| Copy tracking | `copy` event listener | Logged throughout exam |
+| Typing velocity | WPM calculation at submit | >200 WPM with >40 words = flagged |
+| Bulk input | `onChange` delta check | >80 chars in one event = suspicious |
+| Right-click | `onContextMenu` → `preventDefault()` | Disabled on question cards |
+| Text selection | `user-select: none` | Disabled on all question content |
+
+All flags are aggregated into an **Integrity Report** on the final grade card. Scores are evaluated independently — flags are advisory, not punitive.
+
+---
+
+## Architecture
+
+### Deterministic Repository Analysis
+`src/engine/repoAnalysis.js` runs entirely without any LLM. Framework detection, architecture classification (monolith / microservices / serverless / JAMstack), system type inference, and tech stack extraction use rule-based pattern matching over file trees and dependency lists. The LLM receives a clean structured context object — it never reads raw source code.
+
+This design means: zero AI cost for the analysis phase, fully reproducible results, no hallucination risk on the repo facts.
+
+### 4-Key Groq Architecture
+Each AI role has its own Groq API key and independent rate-limit budget:
+
+```
+GROQ_KEY_ANALYSIS   → Key 1 — context orchestration, fallback
+GROQ_KEY_QUESTIONS  → Key 2 — viva question generation
+GROQ_KEY_EVALUATOR  → Key 3 — per-answer analysis
+GROQ_KEY_SCORING    → Key 4 — composite score computation
+```
+
+A rate-limit burst on answer evaluation never starves question generation. In concurrent multi-user sessions, the four queues are completely independent.
+
+### Shareable Certificates Without a Database
+Each completed exam generates a `VRT-2026-XXXXXXXX` verification ID. The report is stored in a server-side `Map()`. The public `/verify/:id` page fetches and renders the full certificate — no login required, includes print CSS for PDF export.
 
 ---
 
@@ -96,45 +145,29 @@ Five dimensions, no artificial floor — scores reflect reality:
 | Layer | Technology |
 |---|---|
 | Frontend | React 19 + Vite 7 + Framer Motion |
-| Styling | Tailwind CSS v4 · parchment design system |
-| Backend | Node.js + Express 5 |
+| Styling | Tailwind CSS v4 · parchment editorial design system |
+| Backend | Node.js 20 + Express 5 |
 | AI | Groq API · Llama-3.3-70b-versatile · 4 dedicated keys |
 | GitHub | REST API v3 · unauthenticated · 60 req/hr |
-| Repo Analysis | Deterministic rule-based engine (zero LLM) |
-| Rate limiting | express-rate-limit · in-memory (Redis optional) |
-
-**4-key Groq architecture** — each role has its own API key and rate-limit budget:
-
-| Key | Role |
-|---|---|
-| `GROQ_KEY_ANALYSIS` | Context analysis & orchestration |
-| `GROQ_KEY_QUESTIONS` | Viva question generation |
-| `GROQ_KEY_EVALUATOR` | Answer analysis |
-| `GROQ_KEY_SCORING` | Score computation |
+| Repo Analysis | Deterministic rule-based (zero LLM) |
+| Certificates | In-memory Map · `/verify/:id` public route |
 
 ---
 
 ## Local Setup
 
-### Prerequisites
-- Node.js 18+
-- 4 Groq API keys (free at [console.groq.com](https://console.groq.com))
-
-### Frontend
+**Prerequisites:** Node.js 18+, 4 Groq API keys (free at [console.groq.com](https://console.groq.com))
 
 ```bash
-cd "Far Away/VERITAS"
-npm install
-cp .env.example .env.local   # fill in VITE_API_URL=http://localhost:3001
-npm run dev
-# → http://localhost:5173
-```
+# Clone
+git clone https://github.com/vishnu-k-dev/veritas.git
+cd veritas
 
-### Backend
-
-```bash
-cd "Far Away/VERITAS/backend"
+# Frontend
 npm install
+
+# Backend
+cd backend && npm install
 ```
 
 Create `backend/.env`:
@@ -142,6 +175,7 @@ Create `backend/.env`:
 NODE_ENV=development
 PORT=3001
 FRONTEND_URL=http://localhost:5173
+CORS_ALLOWED_ORIGINS=http://localhost:5173
 GROQ_KEY_ANALYSIS=gsk_...
 GROQ_KEY_QUESTIONS=gsk_...
 GROQ_KEY_EVALUATOR=gsk_...
@@ -149,41 +183,35 @@ GROQ_KEY_SCORING=gsk_...
 ```
 
 ```bash
+# Start backend (from backend/)
 node server.js
-# → http://localhost:3001/api/ping
-```
 
-### Start the exam
+# Start frontend (from root, separate terminal)
+npm run dev
+```
 
 Open `http://localhost:5173/exam` — no login required.
 
 ---
 
-## Project Structure
+## Deployment
 
-```
-VERITAS/
-├── src/
-│   ├── pages/
-│   │   ├── Landing.jsx          # Landing page
-│   │   ├── ExamFlow.jsx         # Full exam UI (intake → viva → grade card)
-│   │   └── VerifyReport.jsx     # Public /verify/:id certificate page
-│   ├── services/
-│   │   └── githubService.js     # GitHub REST API client
-│   └── engine/
-│       └── repoAnalysis.js      # Deterministic repo parser
-└── backend/
-    ├── app.js                   # Express app
-    └── src/
-        ├── routes/
-        │   └── exam.js          # /api/exam/* — no auth required
-        └── services/ai/
-            └── index.js         # 4-key Groq service
-```
+- **Frontend** → Vercel (connect repo, set `VITE_API_URL` env var)
+- **Backend** → Render (use `render.yaml`, set 4 Groq keys in dashboard)
+
+See [`docs/DEPLOY.md`](docs/DEPLOY.md) for step-by-step instructions.
 
 ---
 
-## Hackathon
+## Security
 
-Built for **Far Away 2026** — India's Biggest International Hackathon  
-Theme: *Examinations — Reimagine the future of examinations with secure, fair and intelligent solutions.*
+- No secrets in repository — `.env` files gitignored
+- CORS restricted to configured frontend origin only
+- Rate limiting on all API endpoints (`express-rate-limit`)
+- Input sanitisation middleware on all routes
+- GitHub access is read-only, unauthenticated, public repos only
+- No user data persisted beyond server session lifetime
+
+---
+
+*Far Away 2026 · Examinations · Solo submission*
