@@ -1,0 +1,112 @@
+﻿<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%234F46E5'/%3E%3Cstop offset='100%25' stop-color='%237C3AED'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M16 2L4 8v8c0 7.7 5.1 14.3 12 16 6.9-1.7 12-8.3 12-16V8L16 2z' fill='url(%23g)'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='14' font-weight='bold' fill='%23fff' font-family='Arial'%3EV%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO -->
+    <title>VERITAS — The Autonomous AI Examination System</title>
+    <meta name="description" content="VERITAS transforms GitHub repositories and project portfolios into adaptive AI examinations that generate evidence-backed Examination Reports. Secure, fair, and intelligent examinations." />
+    <meta name="keywords" content="AI examination, competency verification, adaptive assessment, skill passport, VERITAS, evidence-backed, autonomous examination" />
+    <meta name="author" content="VERITAS" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="VERITAS — The Autonomous AI Examination System" />
+    <meta property="og:description" content="Adaptive AI examinations that verify real competency through evidence from your actual repositories and projects." />
+    <meta property="og:url" content="https://tryveritas.app" />
+    <meta property="og:site_name" content="VERITAS" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VERITAS — The Autonomous AI Examination System" />
+    <meta name="twitter:description" content="Adaptive AI examinations that verify real competency through evidence from your actual repositories." />
+
+    <!-- Performance: Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com">
+    <link rel="preconnect" href="https://VERITAS-api-production.up.railway.app" crossorigin>
+
+    <!-- Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body class="font-display bg-background-dark text-text-cream antialiased">
+    <div id="root"></div>
+    <script>
+      (function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var code = urlParams.get('code');
+        if (!code) return;
+
+        // IMPORTANT: Supabase OAuth (Google/GitHub sign-in) also returns with
+        // ?code=... and relies on its client's detectSessionInUrl to consume
+        // it. If we strip the code here, Supabase never gets the session and
+        // the user bounces back to the landing page.
+        //
+        // The legacy "Connect GitHub afterwards" flow (GitHubRepoPicker) signals
+        // itself before redirecting: popup via window.name='github-oauth',
+        // main-tab redirect via localStorage 'VERITAS_github_oauth_return'. If
+        // neither signal is present, this is a Supabase auth callback — bail
+        // out and let the React app / Supabase client handle the URL.
+        var isPopup = window.name === 'github-oauth' || (window.opener && window.opener !== window);
+        var isLegacyRedirect = localStorage.getItem('VERITAS_github_oauth_return') === 'true';
+        if (!isPopup && !isLegacyRedirect) return;
+
+        // Store code — primary channel for the app to pick up
+        localStorage.setItem('VERITAS_github_oauth_code', code);
+
+        // ── POPUP PATH: window was opened by window.open() ───────────────────
+        // Detect popup via window.name — set to 'github-oauth' by our window.open()
+        // call and survives page navigations. window.opener is NOT reliable here
+        // because GitHub sets COOP: same-origin on their pages, severing it before
+        // the redirect back to our app.
+        if (isPopup) {
+          try {
+            if (window.opener && window.opener !== window) {
+              window.opener.postMessage(
+                { type: 'github-oauth-callback', code: code },
+                window.location.origin
+              );
+            }
+          } catch(e) {}
+          document.title = 'GitHub Connected';
+          // The popup can always close itself — no dependency on window.opener
+          window.close();
+          // If close() somehow fails, show a manual-close message instead of
+          // loading the full React app inside the popup
+          setTimeout(function() {
+            document.body.innerHTML = [
+              '<div style="display:flex;align-items:center;justify-content:center;',
+              'height:100vh;background:#0d1117;color:#e6edf3;font-family:sans-serif;text-align:center">',
+              '<div><div style="font-size:36px;margin-bottom:12px">&#10003;</div>',
+              '<p style="font-size:17px;font-weight:600;margin:0">GitHub connected!</p>',
+              '<p style="opacity:0.55;margin-top:8px;font-size:13px">You can close this tab.</p></div></div>'
+            ].join('');
+          }, 400);
+          return;
+        }
+
+        // ── REDIRECT PATH: popup was blocked, main tab did the OAuth flow ────
+        // DON'T replace the body — let the React app load normally.
+        // Clean the ?code= from the URL so it doesn't confuse the router.
+        // Set a flag so App.jsx knows to restore the GitHub picker phase.
+        localStorage.setItem('VERITAS_github_oauth_return', 'true');
+        try {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch(e) {}
+        // Fall through — main.jsx loads, React picks up the code from localStorage
+      })();
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+

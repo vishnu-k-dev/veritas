@@ -1,0 +1,43 @@
+﻿# Render Blueprint — VERITAS Backend v2
+# Deploy with: render deploy
+services:
+  - type: web
+    name: VERITAS-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GOOGLE_AI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: ADMIN_EMAILS
+        value: vishnuk2006@protonmail.com
+      - key: FRONTEND_URL
+        value: https://www.tryVERITAS.app
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://www.tryVERITAS.app,https://tryVERITAS.app
+      - key: NODE_ENV
+        value: production
+
