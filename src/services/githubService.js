@@ -85,9 +85,9 @@ export async function analyzeRepository(owner, repo, onProgress) {
     languages,
     commits: commits.map(c => ({
       sha:     c.sha,
-      message: c.commit.message.split('\n')[0].slice(0, 120),
-      author:  c.commit.author.name,
-      date:    c.commit.author.date,
+      message: c.commit?.message?.split('\n')[0]?.slice(0, 120) || '',
+      author:  c.commit?.author?.name || c.commit?.committer?.name || 'unknown',
+      date:    c.commit?.author?.date || c.commit?.committer?.date || '',
     })),
     fileTree,
     readme:          (readme          || '').slice(0, 4000),

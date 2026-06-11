@@ -51,7 +51,9 @@ async function call(role, { system, user, maxTokens = 1000 }) {
         ],
         temperature: role === 'scoring' ? 0.1 : role === 'evaluator' ? 0.2 : 0.75,
       })
-      return res.choices[0].message.content
+      const content = res.choices?.[0]?.message?.content
+      if (!content) throw new Error('Groq returned empty response')
+      return content
     } catch (err) {
       const isRateLimit = err?.status === 429 || err?.message?.includes('rate_limit') || err?.message?.includes('rate limit')
       if (isRateLimit) {
@@ -142,13 +144,23 @@ export async function generateCompletion(prompt, options = {}) {
 
 // ── Legacy named exports (used by existing interview/recruiter routes) ─────────
 export async function generateNextQuestion({ systemPrompt, userPrompt }) {
-  const text = await call('questions', { system: systemPrompt, user: userPrompt, maxTokens: 500 })
-  return { question: text, model: MODEL }
+  try {
+    const text = await call('questions', { system: systemPrompt, user: userPrompt, maxTokens: 500 })
+    return { question: text, model: MODEL }
+  } catch (err) {
+    console.error('[AI:generateNextQuestion]', err.message)
+    throw err
+  }
 }
 
 export async function generateReport({ systemPrompt, userPrompt }) {
-  const text = await call('scoring', { system: systemPrompt, user: userPrompt, maxTokens: 2000 })
-  return text
+  try {
+    const text = await call('scoring', { system: systemPrompt, user: userPrompt, maxTokens: 2000 })
+    return text
+  } catch (err) {
+    console.error('[AI:generateReport]', err.message)
+    throw err
+  }
 }
 
 // ── Score parsing helpers (used by exam.js) ───────────────────────────────────
@@ -187,9 +199,9 @@ export function parseEvaluation(text) {
     }
   } catch {
     return {
-      authenticity_score: 50, depth_score: 50, specificity_score: 50,
-      communication_score: 50, consistency_score: 50, composite_score: 50,
-      verdict: 'hold', strength: null, weakness: null, follow_up_needed: false,
+      authenticity_score: 0, depth_score: 0, specificity_score: 0,
+      communication_score: 0, consistency_score: 0, composite_score: 0,
+      verdict: 'fail', strength: null, weakness: 'Evaluation response could not be parsed', follow_up_needed: false,
     }
   }
 }

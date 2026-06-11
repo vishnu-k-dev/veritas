@@ -10,12 +10,20 @@ import { globalLimit } from './src/middleware/rateLimiter.js'
 import examRoutes from './src/routes/exam.js'
 
 // Optional routes — only imported if their files are present
-let aiRoutes, authRoutes, githubRoutes, verifyRoutes, interviewRoutes
-try { aiRoutes       = (await import('./src/routes/ai.js')).default }       catch { /* skip */ }
-try { authRoutes     = (await import('./src/routes/auth.js')).default }     catch { /* skip */ }
-try { githubRoutes   = (await import('./src/routes/github.js')).default }   catch { /* skip */ }
-try { verifyRoutes   = (await import('./src/routes/verify.js')).default }   catch { /* skip */ }
-try { interviewRoutes = (await import('./src/routes/interview.js')).default } catch { /* skip */ }
+const loadRoute = async (path) => {
+  try { return (await import(path)).default }
+  catch (err) {
+    if (err.code !== 'ERR_MODULE_NOT_FOUND') console.error(`[routes] ${path} failed to load:`, err.message)
+    return null
+  }
+}
+const [aiRoutes, authRoutes, githubRoutes, verifyRoutes, interviewRoutes] = await Promise.all([
+  loadRoute('./src/routes/ai.js'),
+  loadRoute('./src/routes/auth.js'),
+  loadRoute('./src/routes/github.js'),
+  loadRoute('./src/routes/verify.js'),
+  loadRoute('./src/routes/interview.js'),
+])
 
 const app = express()
 const IS_PROD = process.env.NODE_ENV === 'production'
@@ -24,10 +32,10 @@ const IS_PROD = process.env.NODE_ENV === 'production'
 app.use(helmet({ contentSecurityPolicy: false, hsts: IS_PROD }))
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5174'
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 const ALLOWED = [
-  'http://localhost:5173', 'http://localhost:5174',
-  'http://localhost:4173', FRONTEND_URL,
+  ...(IS_PROD ? [] : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:4173']),
+  FRONTEND_URL,
   ...(process.env.CORS_ALLOWED_ORIGINS || '').split(',').filter(Boolean),
 ]
 

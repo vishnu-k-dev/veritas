@@ -81,7 +81,7 @@ const CSS = `
 `
 
 export default function VerifyReport() {
-  const id = window.location.pathname.split('/').pop()
+  const id = window.location.pathname.split('/').filter(Boolean).pop()
   const [report, setReport] = useState(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)

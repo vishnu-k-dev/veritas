@@ -116,9 +116,11 @@ export function buildRepoContext(rawData) {
   const architecture = detectArchitecture(rawData)
 
   const totalLangBytes = Object.values(rawData.languages || {}).reduce((s, v) => s + v, 0)
-  const langPercents   = Object.fromEntries(
-    Object.entries(rawData.languages || {}).map(([l, b]) => [l, Math.round((b / totalLangBytes) * 100)])
-  )
+  const langPercents   = totalLangBytes === 0
+    ? {}
+    : Object.fromEntries(
+        Object.entries(rawData.languages || {}).map(([l, b]) => [l, Math.round((b / totalLangBytes) * 100)])
+      )
 
   return {
     name:        rawData.name,

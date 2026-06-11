@@ -11,7 +11,19 @@ router.post('/questions', async (req, res) => {
   const { repoContext, resumeText } = req.body
   if (!repoContext) return res.status(400).json({ error: 'repoContext required' })
 
-  const { name, description, languages, techStack, commits, architecture, systemType, readme } = repoContext
+  const {
+    name:        rawName,
+    description: rawDescription,
+    languages, techStack, commits,
+    architecture: rawArchitecture,
+    systemType:   rawSystemType,
+    readme,
+  } = repoContext
+
+  const name        = String(rawName        || '').slice(0, 100)
+  const description = String(rawDescription || '').slice(0, 300)
+  const architecture = String(rawArchitecture || '').slice(0, 100)
+  const systemType   = String(rawSystemType   || '').slice(0, 60)
 
   const langStr = Object.entries(languages || {})
     .sort((a, b) => b[1] - a[1])
@@ -77,11 +89,14 @@ Return ONLY a JSON array, no markdown, no explanation:
 
 // POST /api/exam/evaluate — evaluate a single candidate answer
 router.post('/evaluate', async (req, res) => {
-  const { question, answer, projectContext, priorQA, questionNumber } = req.body
-  if (!question || !answer) return res.status(400).json({ error: 'question and answer required' })
+  const { question: rawQuestion, answer: rawAnswer, projectContext, priorQA, questionNumber } = req.body
+  if (!rawQuestion || !rawAnswer) return res.status(400).json({ error: 'question and answer required' })
 
-  const priorStr = (priorQA || []).length > 0
-    ? priorQA.map((p, i) => `Q${i + 1}: ${p.question}\nA${i + 1}: ${p.answer}`).join('\n\n')
+  const question = String(rawQuestion).slice(0, 600)
+  const answer   = String(rawAnswer).slice(0, 2000)
+
+  const priorStr = (priorQA || []).slice(0, 10).length > 0
+    ? priorQA.slice(0, 10).map((p, i) => `Q${i + 1}: ${String(p.question || '').slice(0, 400)}\nA${i + 1}: ${String(p.answer || '').slice(0, 600)}`).join('\n\n')
     : 'First answer — no prior context.'
 
   const prompt = `QUESTION ASKED (Q${questionNumber || '?'}): ${question}
@@ -155,13 +170,7 @@ Return ONLY valid JSON — no markdown, no text outside the object:
     maxTokens: 600
   })
 
-  const FALLBACK = {
-    authenticity_score: 50, depth_score: 50, specificity_score: 50,
-    communication_score: 50, consistency_score: 50, composite_score: 50,
-    verdict: 'hold', strength: null, weakness: null, follow_up_needed: false
-  }
-
-  if (!evalResult.success) return res.json(FALLBACK)
+  if (!evalResult.success) return res.status(503).json({ error: 'Evaluation service unavailable — try again shortly' })
 
   let ev
   try {
@@ -169,7 +178,7 @@ Return ONLY valid JSON — no markdown, no text outside the object:
     const match = cleaned.match(/\{[\s\S]*\}/)
     ev = JSON.parse(match ? match[0] : cleaned)
   } catch {
-    return res.json(FALLBACK)
+    return res.status(503).json({ error: 'Evaluation response malformed — try again shortly' })
   }
 
   // Key 4 (GROQ_KEY_SCORING) — validate and compute final composite score
