@@ -353,13 +353,14 @@ export default function ExamFlow() {
     setAnswer(newVal)
   }
 
-  // ── typing speed check on submit ─────────────────────────────────────────
+  // ── typing speed check on submit — returns { suspicious, wpm } ───────────
   function checkTypingSpeed(text) {
-    if (!answerStartRef.current) return false
-    const elapsed = (Date.now() - answerStartRef.current) / 1000 / 60 // minutes
+    if (!answerStartRef.current) return { suspicious: false, wpm: 0 }
+    const elapsed = Math.max((Date.now() - answerStartRef.current) / 1000 / 60, 0.01)
     const words = text.trim().split(/\s+/).length
-    const wpm = words / elapsed
-    return words > 40 && wpm > 200 // > 200 WPM with substantial answer = suspicious
+    const wpm = Math.round(words / elapsed)
+    const suspicious = words > 40 && wpm > 200
+    return { suspicious, wpm }
   }
 
   // ── Resume parse ──────────────────────────────────────────────────────────
@@ -433,7 +434,7 @@ export default function ExamFlow() {
   // ── Submit answer ─────────────────────────────────────────────────────────
   async function handleSubmitAnswer() {
     if (!answer.trim() || evaluating) return
-    const suspicious = checkTypingSpeed(answer)
+    const { suspicious, wpm } = checkTypingSpeed(answer)
     if (suspicious) setIntegrity(p => ({ ...p, suspiciousCount: p.suspiciousCount + 1 }))
     setEvaluating(true)
     try {
@@ -441,7 +442,12 @@ export default function ExamFlow() {
       const projectContext = `${repoCtx?.name}: ${repoCtx?.description || ''} | Tech: ${(repoCtx?.techStack || []).join(', ')}`
       const evRes = await fetch(`${API}/api/exam/evaluate`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: questions[qIndex].question, answer: answer.trim(), projectContext, priorQA, questionNumber: qIndex + 1, sessionId })
+        body: JSON.stringify({
+          question: questions[qIndex].question, answer: answer.trim(),
+          projectContext, priorQA, questionNumber: qIndex + 1, sessionId,
+          pasteDetected: integrity.pasteAttempts > 0,
+          wpm,
+        })
       })
       const ev = evRes.ok ? await evRes.json() : { composite_score: 0, verdict: 'fail', strength: null, weakness: null }
       setQaPairs(prev => [...prev, {
@@ -449,7 +455,8 @@ export default function ExamFlow() {
         answer: answer.trim(),
         area: questions[qIndex].area,
         evaluation: ev,
-        suspicious
+        suspicious,
+        aiDetection: ev.aiDetection || null,
       }])
     } catch {
       setQaPairs(prev => [...prev, { question: questions[qIndex].question, answer: answer.trim(), area: questions[qIndex].area, evaluation: { composite_score: 0, verdict: 'fail' } }])
@@ -474,7 +481,17 @@ export default function ExamFlow() {
       try {
         const rRes = await fetch(`${API}/api/exam/report`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ candidateName: name, repoName: repoCtx?.name, repoUrl: repoCtx?.repoUrl, techStack: repoCtx?.techStack, qaPairs, sessionId })
+          body: JSON.stringify({
+          candidateName: name, repoName: repoCtx?.name, repoUrl: repoCtx?.repoUrl,
+          techStack: repoCtx?.techStack, qaPairs, sessionId,
+          integrityFlags: {
+            tabSwitches: integrity.tabSwitches,
+            pasteAttempts: integrity.pasteAttempts,
+            copyAttempts: integrity.copyAttempts,
+            suspiciousTyping: integrity.suspiciousCount,
+            aiDetections: qaPairs.map((p, i) => ({ q: i + 1, ...p.aiDetection })).filter(d => d.verdict && d.verdict !== 'clean'),
+          },
+        })
         })
         if (rRes.ok) setReport(await rRes.json())
       } catch { /* non-critical */ }
@@ -855,6 +872,46 @@ export default function ExamFlow() {
                 })()}
               </div>
             </div>
+
+            {/* AI usage detection */}
+            {(() => {
+              const flagged = qaPairs.filter(p => p.aiDetection?.verdict === 'flagged')
+              const suspicious = qaPairs.filter(p => p.aiDetection?.verdict === 'suspicious')
+              const allClean = flagged.length === 0 && suspicious.length === 0
+              return (
+                <div className="ef-integrity" style={{ marginTop: 16 }}>
+                  <h4>AI Usage Analysis</h4>
+                  <div className="ef-integrity-note" style={{ marginBottom: flagged.length > 0 ? 14 : 0 }}>
+                    {allClean
+                      ? '✓ No AI-generated response patterns detected across all answers.'
+                      : `${flagged.length} answer${flagged.length !== 1 ? 's' : ''} flagged, ${suspicious.length} suspicious. Patterns typical of AI-generated text were detected in the answers below.`
+                    }
+                  </div>
+                  {!allClean && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {qaPairs.map((p, i) => {
+                        const d = p.aiDetection
+                        if (!d || d.verdict === 'clean') return null
+                        const isFlag = d.verdict === 'flagged'
+                        return (
+                          <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '10px 14px', background: isFlag ? 'rgba(142,42,27,0.05)' : 'rgba(139,132,114,0.07)', border: `1px solid ${isFlag ? 'rgba(142,42,27,0.2)' : 'var(--line-strong)'}`, borderRadius: 2 }}>
+                            <span style={{ fontFamily: 'var(--fm)', fontSize: 9.5, color: isFlag ? 'var(--accent)' : 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase', paddingTop: 2, flexShrink: 0 }}>Q{i + 1}</span>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontFamily: 'var(--fm)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: isFlag ? 'var(--accent)' : 'var(--soft)', marginBottom: 4 }}>
+                                {isFlag ? '⚑ Flagged' : '⚐ Suspicious'} · Score {d.suspicionScore}/100
+                              </div>
+                              <div style={{ fontFamily: 'var(--fm)', fontSize: 9, color: 'var(--muted)', letterSpacing: '0.06em' }}>
+                                {d.signals.map(s => s.replace(/_/g, ' ')).join(' · ')}
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
 
           </div>
         )}

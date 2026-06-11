@@ -182,6 +182,31 @@ export default function VerifyReport() {
                   </div>
                 </div>
 
+                {/* AI usage integrity summary */}
+                {report.integrityFlags && (() => {
+                  const detections = report.integrityFlags.aiDetections || []
+                  const flagged = detections.filter(d => d.verdict === 'flagged').length
+                  const behavioural = (report.integrityFlags.tabSwitches || 0) + (report.integrityFlags.pasteAttempts || 0)
+                  if (flagged === 0 && behavioural === 0) return (
+                    <div className="vr-badge" style={{ background: 'rgba(30,107,69,0.04)', borderColor: 'rgba(30,107,69,0.15)', marginBottom: 24 }}>
+                      <div className="badge-icon" style={{ fontSize: 18 }}>🛡️</div>
+                      <div className="badge-text"><strong style={{ color: 'var(--verified)' }}>AI Usage: Clean.</strong> No AI-generated response patterns were detected in any answer. No behavioural flags during the examination.</div>
+                    </div>
+                  )
+                  return (
+                    <div className="vr-badge" style={{ background: 'rgba(142,42,27,0.04)', borderColor: 'rgba(142,42,27,0.2)', marginBottom: 24 }}>
+                      <div className="badge-icon" style={{ fontSize: 18 }}>⚑</div>
+                      <div className="badge-text">
+                        <strong style={{ color: 'var(--accent)' }}>Integrity flags present.</strong>{' '}
+                        {flagged > 0 && <>{flagged} answer{flagged !== 1 ? 's' : ''} contained patterns consistent with AI-generated text. </>}
+                        {report.integrityFlags.pasteAttempts > 0 && <>{report.integrityFlags.pasteAttempts} paste attempt{report.integrityFlags.pasteAttempts !== 1 ? 's' : ''} were blocked. </>}
+                        {report.integrityFlags.tabSwitches > 0 && <>{report.integrityFlags.tabSwitches} tab switch{report.integrityFlags.tabSwitches !== 1 ? 'es' : ''} recorded. </>}
+                        Scores reflect only the content of answers and were evaluated independently of these flags.
+                      </div>
+                    </div>
+                  )
+                })()}
+
                 <div className="vr-meta">
                   {[
                     { val: report.scores?.overall ?? '—', label: 'Overall Score' },

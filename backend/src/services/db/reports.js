@@ -27,8 +27,8 @@ export async function saveReport(report) {
   await db.query(
     `INSERT INTO exam_reports
        (verification_id, candidate_name, repo_name, repo_url, tech_stack,
-        scores, verdict, rag_enabled, share_url, issued_at)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        scores, verdict, rag_enabled, integrity_flags, share_url, issued_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
      ON CONFLICT (verification_id) DO NOTHING`,
     [
       report.verificationId,
@@ -39,6 +39,7 @@ export async function saveReport(report) {
       JSON.stringify(report.scores),
       report.verdict,
       report.ragEnabled || false,
+      report.integrityFlags ? JSON.stringify(report.integrityFlags) : null,
       report.shareUrl || '',
       report.issuedAt,
     ]
@@ -64,6 +65,7 @@ export async function getReport(verificationId) {
     scores:          r.scores,
     verdict:         r.verdict,
     ragEnabled:      r.rag_enabled,
+    integrityFlags:  r.integrity_flags || null,
     shareUrl:        r.share_url,
     issuedAt:        r.issued_at,
   }

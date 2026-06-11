@@ -6,6 +6,7 @@ import rateLimit from 'express-rate-limit'
 import { generateQuestions, evaluateAnswer } from '../services/ai/index.js'
 import { isRagEnabled, indexRepo, retrieveForQuestions, retrieveEvidence, purgeSession } from '../services/rag/indexer.js'
 import { saveReport, getReport, isDbEnabled } from '../services/db/reports.js'
+import { detectAIUsage } from '../services/integrity/aiDetector.js'
 
 const router = Router()
 
@@ -136,7 +137,7 @@ Return ONLY a JSON array, no markdown, no explanation:
 
 // POST /api/exam/evaluate — evaluate a single candidate answer with RAG evidence grounding
 router.post('/evaluate', evaluateLimit, async (req, res) => {
-  const { question: rawQuestion, answer: rawAnswer, projectContext, priorQA, questionNumber, sessionId } = req.body
+  const { question: rawQuestion, answer: rawAnswer, projectContext, priorQA, questionNumber, sessionId, pasteDetected, wpm } = req.body
   if (!rawQuestion || !rawAnswer) return res.status(400).json({ error: 'question and answer required' })
 
   const question = String(rawQuestion).slice(0, 600)
@@ -258,6 +259,12 @@ Return ONLY valid JSON — no markdown, no text outside the object:
   const composite = clamp(Math.round(auth * 0.45 + depth * 0.25 + spec * 0.15 + comm * 0.10 + cons * 0.05))
   const verdict = composite >= 60 ? 'pass' : composite >= 35 ? 'hold' : 'fail'
 
+  // ── AI usage detection (heuristic, zero API cost) ─────────────────────────
+  const aiDetection = detectAIUsage(answer, {
+    pasteDetected: !!pasteDetected,
+    wpm: Number(wpm) || 0,
+  })
+
   res.json({
     authenticity_score: auth, depth_score: depth, specificity_score: spec,
     communication_score: comm, consistency_score: cons,
@@ -266,6 +273,7 @@ Return ONLY valid JSON — no markdown, no text outside the object:
     weakness: ev.weakness || null,
     follow_up_needed: ev.follow_up_needed ?? false,
     rag: !!evidenceBlock,
+    aiDetection,
   })
 })
 
@@ -288,7 +296,7 @@ router.get('/report/:id', async (req, res) => {
 
 // POST /api/exam/report — generate final certificate, purge RAG session
 router.post('/report', async (req, res) => {
-  const { candidateName, repoName, repoUrl, techStack, qaPairs, sessionId } = req.body
+  const { candidateName, repoName, repoUrl, techStack, qaPairs, sessionId, integrityFlags } = req.body
   if (!qaPairs?.length) return res.status(400).json({ error: 'qaPairs required' })
 
   const verificationId = `VRT-${new Date().getFullYear()}-${randomBytes(4).toString('hex').toUpperCase()}`
@@ -322,6 +330,7 @@ router.post('/report', async (req, res) => {
     },
     verdict,
     ragEnabled: isRagEnabled(),
+    integrityFlags: integrityFlags || null,
     shareUrl: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify/${verificationId}`,
   }
 

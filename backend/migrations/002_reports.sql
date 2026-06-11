@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS exam_reports (
   scores           JSONB        NOT NULL,
   verdict          TEXT         NOT NULL,
   rag_enabled      BOOLEAN      DEFAULT FALSE,
+  integrity_flags  JSONB        DEFAULT NULL,
   share_url        TEXT         DEFAULT '',
   issued_at        TIMESTAMPTZ  DEFAULT NOW()
 );
