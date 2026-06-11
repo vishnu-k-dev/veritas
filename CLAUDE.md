@@ -26,12 +26,20 @@ VERITAS/
 │   └── services/
 │       └── githubService.js     # GitHub REST API client — unauthenticated, ~7 calls/session
 └── backend/
-    ├── app.js                   # Express 5 entrypoint — minimal, only exam routes active
+    ├── app.js                   # Express entrypoint — exam routes only, optional route loading
+    ├── migrate.js               # One-shot migration runner — node migrate.js
+    ├── migrations/
+    │   └── 001_rag.sql          # pgvector schema — repo_chunks table + HNSW index
     └── src/
         ├── routes/
         │   └── exam.js          # /api/exam/* — questions, evaluate, report — all public, no auth
-        └── services/ai/
-            └── index.js         # 4-key Groq service with retry/backoff
+        └── services/
+            ├── ai/
+            │   └── index.js     # 4-key Groq service with retry/backoff
+            └── rag/
+                ├── embed.js     # Cohere embed-english-v3.0 — 1024-dim embeddings, batched
+                ├── store.js     # pgvector CRUD — Pool, ensureSchema, insertChunks, search, purge
+                └── indexer.js   # Chunking + session orchestration — indexRepo, retrieveForQuestions, retrieveEvidence
 ```
 
 ## Key Architectural Decisions
@@ -65,7 +73,16 @@ This means a rate limit burst on answer evaluation never blocks question generat
 - onChange delta >80 chars in one event → suspicious input detected
 - `user-select: none` + `onContextMenu` disabled on question cards
 
-### 5. Shareable Certificates Without a Database
+### 5. pgvector RAG Pipeline (evidence-grounded evaluation)
+`backend/src/services/rag/` — When `DATABASE_URL` and `COHERE_API_KEY` are set, every exam session:
+1. **Indexes** the full repo into Neon pgvector: meta, tech stack, README paragraphs, each commit individually, file tree batches — ~35–50 chunks per session
+2. **Retrieves** top-15 semantically relevant chunks (Cohere `embed-english-v3.0`, HNSW cosine search) to enrich the question generation prompt — the LLM sees the full indexed repo, not a truncated excerpt
+3. **Retrieves** top-8 evidence chunks at evaluation time, keyed to the candidate's answer text — the evaluator can verify or contradict specific claims against actual repo content
+4. **Purges** all session vectors after the report is saved (no storage accumulation)
+
+Graceful degradation: if either env var is absent, the exam falls back to raw context with zero errors.
+
+### 6. Shareable Certificates Without a Database
 `backend/src/routes/exam.js` (reportStore) + `src/pages/VerifyReport.jsx` — Reports are stored in a server-side `Map()`. No database required. Each certificate gets a unique `VRT-2026-XXXXXXXX` verification ID and a public URL at `/verify/:id`. The verification page is public, no login required, and includes print CSS for PDF export.
 
 ## Scoring Algorithm

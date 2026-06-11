@@ -82,30 +82,42 @@ Candidates are coached to use the STAR method. Interviewers are coached to probe
 
 ```
   GitHub Repo URL
-        |
-        v
+        │
+        ▼
   GitHub REST API  (7 calls, unauthenticated)
   metadata · commits · languages · file tree · README · package.json
-        |
-        v
+        │
+        ▼
   Deterministic Repo Analysis  [ZERO LLM — pure rule-based]
   framework detect · architecture classify · tech stack extract
-        |
-        v
+        │
+        ├──────────────────────────────────────┐
+        ▼                                      ▼
+  Cohere embed-english-v3.0            (fallback: raw context)
+  ~40 chunks embedded → Neon pgvector
+  HNSW cosine index built in <2s
+        │
+        ▼
+  Semantic Retrieval  [top-15 chunks]
+  full commit history · README sections · file structure
+        │
+        ▼
   Groq / Llama-3.3-70b  [Key 2: Question Generation]
-  5 questions — each cites a specific commit or design decision
-        |
-        v
+  5 questions — each grounded in retrieved repo evidence
+        │
+        ▼
   Proctored Written Examination
   paste blocked · tab switches logged · typing velocity analysed
-        |
+        │
   per answer:
-  Groq / Llama-3.3-70b  [Key 3: Answer Analysis]
+  RAG retrieval  →  top-8 evidence chunks keyed to the answer
+  Groq / Llama-3.3-70b  [Key 3: Answer Analysis + evidence cross-check]
   Groq / Llama-3.3-70b  [Key 4: Score Computation]
-        |
-        v
+        │
+        ▼
   Grade Card + Integrity Report
   Verification ID · /verify/:id · shareable, no login required
+  pgvector session purged on report save
 ```
 
 ---
@@ -168,6 +180,13 @@ GROQ_KEY_SCORING    → Key 4 — composite score computation
 ```
 Each role has its own independent rate-limit budget. A burst on answer evaluation never blocks question generation for another user.
 
+### pgvector RAG Pipeline
+`backend/src/services/rag/` — At question generation, the full repo is chunked (commits individually, README by paragraph, file tree in batches) and embedded with Cohere `embed-english-v3.0` into a Neon Postgres pgvector table. An HNSW index (cosine ops) is built on the session. The LLM receives the top-15 semantically retrieved chunks instead of a truncated excerpt — it can see every commit, not just the last 10.
+
+At evaluation time, the candidate's answer is embedded and the top-8 most relevant repo chunks are retrieved and injected into the evaluator prompt. The AI can now verify or contradict specific claims against actual repo evidence. Session vectors are purged after the report saves — no storage accumulation.
+
+Both `DATABASE_URL` (Neon) and `COHERE_API_KEY` are optional. Without them the exam runs normally on raw context.
+
 ### Shareable Certificates Without a Database
 Each exam produces a `VRT-2026-XXXXXXXX` verification ID stored in a server-side `Map()`. The public `/verify/:id` page renders the full certificate — no login, includes print CSS for PDF export.
 
@@ -181,6 +200,8 @@ Each exam produces a `VRT-2026-XXXXXXXX` verification ID stored in a server-side
 | Styling | Tailwind CSS v4 · parchment editorial design system |
 | Backend | Node.js 20 + Express 5 |
 | AI | Groq API · Llama-3.3-70b-versatile · 4 dedicated keys |
+| Embeddings | Cohere `embed-english-v3.0` · 1024 dimensions · batched |
+| Vector DB | Neon Postgres · pgvector · HNSW cosine index |
 | GitHub | REST API v3 · unauthenticated · 60 req/hr |
 | Repo Analysis | Deterministic rule-based (zero LLM) |
 | Certificates | In-memory Map · `/verify/:id` public route |
@@ -208,7 +229,13 @@ GROQ_KEY_ANALYSIS=gsk_...
 GROQ_KEY_QUESTIONS=gsk_...
 GROQ_KEY_EVALUATOR=gsk_...
 GROQ_KEY_SCORING=gsk_...
+
+# Optional — enables RAG pipeline (richer questions, evidence-grounded evaluation)
+DATABASE_URL=postgresql://...@...neon.tech/neondb?sslmode=require
+COHERE_API_KEY=...
 ```
+
+If using RAG, run the migration once: `node migrate.js` from the `backend/` directory.
 
 ```bash
 node server.js          # from backend/
