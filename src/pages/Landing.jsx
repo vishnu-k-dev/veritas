@@ -248,47 +248,43 @@ const LANDING_CSS = `
 .pillar li::before { content: "—"; color: var(--muted); flex-shrink: 0; }
 
 /* ── problem section ── */
-.prob-section { background: var(--text); color: var(--bg); padding: 80px 0; }
-.prob-section .sec-head { margin-bottom: 48px; }
-.prob-section .sec-head h2 { color: var(--bg); }
-.prob-section .sec-head p.lede { color: rgba(245,242,233,0.6); }
+.prob-section { background: var(--surface-2); }
 .prob-grid {
   display: grid; grid-template-columns: 1fr 1fr;
-  border: 1px solid rgba(245,242,233,0.1); border-radius: 3px; overflow: hidden;
+  border: 1px solid var(--line-strong); border-radius: 3px; overflow: hidden;
 }
-.prob-candidate { padding: 44px 40px; position: relative; }
-.prob-candidate + .prob-candidate { border-left: 1px solid rgba(245,242,233,0.1); }
+.prob-candidate { padding: 44px 40px; background: var(--surface); position: relative; }
+.prob-candidate + .prob-candidate { border-left: 1px solid var(--line-strong); }
 .prob-tag {
   font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.22em;
   text-transform: uppercase; margin-bottom: 22px;
-  display: inline-flex; align-items: center; gap: 8px;
-  color: rgba(245,242,233,0.45);
+  display: inline-flex; align-items: center; gap: 8px; color: var(--muted);
 }
 .prob-tag-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-.prob-name { font-family: var(--font-display); font-size: 30px; font-weight: 500; letter-spacing: -0.014em; margin-bottom: 4px; color: var(--bg); }
-.prob-role { font-size: 11px; color: rgba(245,242,233,0.38); margin-bottom: 26px; font-family: var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; }
-.prob-story { font-size: 14px; color: rgba(245,242,233,0.72); line-height: 1.78; margin-bottom: 30px; }
-.prob-story em { color: var(--bg); font-style: normal; }
-.prob-result { border-top: 1px solid rgba(245,242,233,0.1); padding-top: 22px; }
-.prob-result-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,242,233,0.35); margin-bottom: 12px; }
+.prob-name { font-family: var(--font-display); font-size: 30px; font-weight: 500; letter-spacing: -0.014em; margin-bottom: 4px; color: var(--text); }
+.prob-role { font-size: 11px; color: var(--muted); margin-bottom: 26px; font-family: var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; }
+.prob-story { font-size: 14px; color: var(--soft); line-height: 1.78; margin-bottom: 30px; }
+.prob-story em { color: var(--text); font-style: normal; font-weight: 500; }
+.prob-result { border-top: 1px solid var(--line); padding-top: 22px; }
+.prob-result-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 .prob-verdict-row { display: flex; gap: 10px; }
-.pvo { background: rgba(245,242,233,0.05); border: 1px solid rgba(245,242,233,0.09); border-radius: 2px; padding: 10px 14px; flex: 1; }
-.pvo-head { font-size: 9.5px; font-family: var(--font-mono); letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,242,233,0.35); margin-bottom: 6px; }
-.pvo-val { font-family: var(--font-display); font-size: 16px; font-weight: 500; color: var(--bg); }
-.pvo-val.fail { color: #C97F6B; }
-.pvo-val.pass { color: #2D9E6B; }
-.prob-footnote { margin-top: 12px; font-size: 12.5px; color: rgba(245,242,233,0.38); line-height: 1.65; }
+.pvo { background: var(--surface-2); border: 1px solid var(--line); border-radius: 2px; padding: 10px 14px; flex: 1; }
+.pvo-head { font-size: 9.5px; font-family: var(--font-mono); letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.pvo-val { font-family: var(--font-display); font-size: 16px; font-weight: 500; color: var(--text); }
+.pvo-val.fail { color: var(--accent); }
+.pvo-val.pass { color: var(--verified); }
+.prob-footnote { margin-top: 12px; font-size: 12.5px; color: var(--muted); line-height: 1.65; }
 .prob-resolution {
-  margin-top: 32px; background: rgba(245,242,233,0.04);
-  border: 1px solid rgba(245,242,233,0.1); border-radius: 3px;
+  margin-top: 32px; background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: 3px;
   padding: 40px 48px; text-align: center;
 }
-.prob-resolution .eyebrow-warm { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #C97F6B; margin-bottom: 18px; display: block; }
-.prob-resolution h3 { font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 30px); font-weight: 500; letter-spacing: -0.014em; color: var(--bg); line-height: 1.25; max-width: 700px; margin: 0 auto; }
-.prob-resolution p { margin-top: 14px; font-size: 14px; color: rgba(245,242,233,0.6); line-height: 1.75; max-width: 620px; margin-left: auto; margin-right: auto; }
+.prob-resolution .eyebrow-warm { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; display: block; }
+.prob-resolution h3 { font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 30px); font-weight: 500; letter-spacing: -0.014em; color: var(--text); line-height: 1.25; max-width: 700px; margin: 0 auto; }
+.prob-resolution p { margin-top: 14px; font-size: 14px; color: var(--soft); line-height: 1.75; max-width: 620px; margin-left: auto; margin-right: auto; }
 @media (max-width: 1080px) {
   .prob-grid { grid-template-columns: 1fr; }
-  .prob-candidate + .prob-candidate { border-left: none; border-top: 1px solid rgba(245,242,233,0.1); }
+  .prob-candidate + .prob-candidate { border-left: none; border-top: 1px solid var(--line-strong); }
   .prob-resolution { padding: 32px 24px; }
 }
 
@@ -537,7 +533,7 @@ export default function Landing({ onGetStarted }) {
                                     <div className="prob-verdict-row">
                                         <div className="pvo">
                                             <div className="pvo-head">Question</div>
-                                            <div className="pvo-val" style={{ fontSize: 13, fontFamily: 'var(--font-ui)', color: 'rgba(245,242,233,0.65)' }}>"Tell me about a challenging project."</div>
+                                            <div className="pvo-val" style={{ fontSize: 13, fontFamily: 'var(--font-ui)' }}>"Tell me about a challenging project."</div>
                                         </div>
                                         <div className="pvo">
                                             <div className="pvo-head">Verdict</div>
@@ -564,7 +560,7 @@ export default function Landing({ onGetStarted }) {
                                     <div className="prob-verdict-row">
                                         <div className="pvo">
                                             <div className="pvo-head">Question</div>
-                                            <div className="pvo-val" style={{ fontSize: 13, fontFamily: 'var(--font-ui)', color: 'rgba(245,242,233,0.65)' }}>"Tell me about a challenging project."</div>
+                                            <div className="pvo-val" style={{ fontSize: 13, fontFamily: 'var(--font-ui)' }}>"Tell me about a challenging project."</div>
                                         </div>
                                         <div className="pvo">
                                             <div className="pvo-head">Verdict</div>
@@ -578,7 +574,7 @@ export default function Landing({ onGetStarted }) {
 
                         <div className="prob-resolution sr">
                             <span className="eyebrow-warm">The VERITAS difference</span>
-                            <h3>What if the exam asked Arjun why commit <span style={{ color: '#C97F6B' }}>a3f9c2b</span> exists — and asked Riya the same question about her repo?</h3>
+                            <h3>What if the exam asked Arjun why commit <span style={{ color: 'var(--accent)' }}>a3f9c2b</span> exists — and asked Riya the same question about her repo?</h3>
                             <p>VERITAS reads the actual repository. Every question is grounded in a real decision, a real commit, a real tradeoff the author made. You can only answer it if you were actually there. There is no question bank to memorise. There is no generic answer that scores well. The exam becomes the proof.</p>
                         </div>
                     </div>
