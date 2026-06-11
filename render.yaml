@@ -17,6 +17,11 @@ services:
         sync: false
       - key: GROQ_KEY_SCORING
         sync: false
+      # RAG pipeline — Neon Postgres + Cohere embeddings (optional, set in Render dashboard)
+      - key: DATABASE_URL
+        sync: false
+      - key: COHERE_API_KEY
+        sync: false
       # App config — update FRONTEND_URL to your Vercel URL after deploying frontend
       - key: NODE_ENV
         value: production

@@ -1,12 +1,13 @@
 // backend/src/routes/exam.js
-// No-auth public examination routes — candidate flow (no Supabase required)
+// No-auth public examination routes — candidate flow
 import { Router } from 'express'
-import { generateQuestions, evaluateAnswer, computeScores } from '../services/ai/index.js'
 import { randomBytes } from 'crypto'
+import { generateQuestions, evaluateAnswer, computeScores } from '../services/ai/index.js'
+import { isRagEnabled, indexRepo, retrieveForQuestions, retrieveEvidence, purgeSession } from '../services/rag/indexer.js'
 
 const router = Router()
 
-// POST /api/exam/questions — generate viva questions from repo context
+// POST /api/exam/questions — index repo into pgvector, generate viva questions
 router.post('/questions', async (req, res) => {
   const { repoContext, resumeText } = req.body
   if (!repoContext) return res.status(400).json({ error: 'repoContext required' })
@@ -20,24 +21,42 @@ router.post('/questions', async (req, res) => {
     readme,
   } = repoContext
 
-  const name        = String(rawName        || '').slice(0, 100)
-  const description = String(rawDescription || '').slice(0, 300)
+  const name         = String(rawName         || '').slice(0, 100)
+  const description  = String(rawDescription  || '').slice(0, 300)
   const architecture = String(rawArchitecture || '').slice(0, 100)
   const systemType   = String(rawSystemType   || '').slice(0, 60)
 
-  const langStr = Object.entries(languages || {})
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 4)
-    .map(([l]) => l)
-    .join(', ')
+  // ── RAG: index repo into pgvector and retrieve rich context ──────────────────
+  let sessionId = null
+  let ragContext = null
 
-  const commitLines = (commits || []).slice(0, 10)
-    .map(c => `  ${c.sha?.slice(0, 7) || '???????'} "${c.message}" — ${c.author}`)
-    .join('\n')
+  if (isRagEnabled()) {
+    sessionId = `exam_${Date.now()}_${randomBytes(4).toString('hex')}`
+    try {
+      await indexRepo(sessionId, repoContext)
+      ragContext = await retrieveForQuestions(sessionId, name)
+    } catch (err) {
+      console.warn('[RAG] Indexing failed, using raw context:', err.message)
+      sessionId = null
+      ragContext = null
+    }
+  }
 
-  const prompt = `You are VERITAS — an AI oral examiner. Your job: expose whether a candidate genuinely built what they claim.
+  // ── Build question prompt (RAG-enriched or raw fallback) ─────────────────────
+  let contextBlock
+  if (ragContext) {
+    contextBlock = `REPOSITORY INTELLIGENCE (retrieved from full semantic index — ${repoContext.fileCount || 0} files, ${commits?.length || 0} commits indexed):
 
-PROJECT: ${name}
+${ragContext}`
+  } else {
+    const langStr = Object.entries(languages || {})
+      .sort((a, b) => b[1] - a[1]).slice(0, 4).map(([l]) => l).join(', ')
+
+    const commitLines = (commits || []).slice(0, 10)
+      .map(c => `  ${c.sha?.slice(0, 7) || '???????'} "${c.message}" — ${c.author}`)
+      .join('\n')
+
+    contextBlock = `PROJECT: ${name}
 ${description ? `Description: ${description}` : ''}
 Languages: ${langStr || 'unknown'}
 Tech stack: ${(techStack || []).join(', ') || 'unknown'}
@@ -46,9 +65,14 @@ System type: ${systemType || 'software project'}
 ${readme ? `README (excerpt):\n${readme.slice(0, 700)}` : ''}
 
 Commit history (evidence):
-${commitLines || '  (no commits available)'}
+${commitLines || '  (no commits available)'}`
+  }
 
-${resumeText ? `Candidate background: ${resumeText.slice(0, 400)}` : ''}
+  const prompt = `You are VERITAS — an AI oral examiner. Your job: expose whether a candidate genuinely built what they claim.
+
+${contextBlock}
+
+${resumeText ? `Candidate background: ${String(resumeText).slice(0, 400)}` : ''}
 
 Generate exactly 5 examination questions. Non-negotiable rules:
 1. Every question must be unanswerable by someone who copy-pasted or never ran the code
@@ -71,44 +95,63 @@ Return ONLY a JSON array, no markdown, no explanation:
 
   const result = await generateQuestions(prompt, {
     systemPrompt: 'You are VERITAS, an expert technical examiner. Return ONLY valid JSON — no markdown, no text outside the array.',
-    maxTokens: 1400
+    maxTokens: 1400,
   })
 
   if (!result.success) return res.status(503).json({ error: 'AI unavailable — try again shortly' })
 
   try {
     const cleaned = result.data.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-    // Find JSON array in response
     const match = cleaned.match(/\[[\s\S]*\]/)
     const questions = JSON.parse(match ? match[0] : cleaned)
-    res.json({ questions: Array.isArray(questions) ? questions : [] })
+    res.json({ questions: Array.isArray(questions) ? questions : [], sessionId })
   } catch {
-    res.json({ questions: [], raw: result.data })
+    res.json({ questions: [], sessionId, raw: result.data })
   }
 })
 
-// POST /api/exam/evaluate — evaluate a single candidate answer
+// POST /api/exam/evaluate — evaluate a single candidate answer with RAG evidence grounding
 router.post('/evaluate', async (req, res) => {
-  const { question: rawQuestion, answer: rawAnswer, projectContext, priorQA, questionNumber } = req.body
+  const { question: rawQuestion, answer: rawAnswer, projectContext, priorQA, questionNumber, sessionId } = req.body
   if (!rawQuestion || !rawAnswer) return res.status(400).json({ error: 'question and answer required' })
 
   const question = String(rawQuestion).slice(0, 600)
   const answer   = String(rawAnswer).slice(0, 2000)
 
   const priorStr = (priorQA || []).slice(0, 10).length > 0
-    ? priorQA.slice(0, 10).map((p, i) => `Q${i + 1}: ${String(p.question || '').slice(0, 400)}\nA${i + 1}: ${String(p.answer || '').slice(0, 600)}`).join('\n\n')
+    ? priorQA.slice(0, 10).map((p, i) =>
+        `Q${i + 1}: ${String(p.question || '').slice(0, 400)}\nA${i + 1}: ${String(p.answer || '').slice(0, 600)}`
+      ).join('\n\n')
     : 'First answer — no prior context.'
+
+  // ── RAG: retrieve repo evidence relevant to this answer ──────────────────────
+  let evidenceBlock = ''
+  if (sessionId && isRagEnabled()) {
+    try {
+      const evidence = await retrieveEvidence(sessionId, answer)
+      if (evidence) {
+        evidenceBlock = `\nREPOSITORY EVIDENCE (retrieved from pgvector index — verify candidate claims against this):
+${evidence}
+
+Use this evidence to check: does the candidate mention real files, real commits, real decisions that actually exist in this repo?
+`
+      }
+    } catch (err) {
+      console.warn('[RAG] Evidence retrieval failed:', err.message)
+    }
+  }
 
   const prompt = `QUESTION ASKED (Q${questionNumber || '?'}): ${question}
 
 CANDIDATE'S ANSWER: ${answer}
 
-PROJECT CONTEXT: ${(projectContext || '').slice(0, 800)}
-
+PROJECT CONTEXT: ${String(projectContext || '').slice(0, 400)}
+${evidenceBlock}
 PRIOR ANSWERS (for consistency check):
 ${priorStr}
 
 BE STRICT. A one-word answer like "ok", "yes", "fine", "good" scores 5–10 across all dimensions — it provides zero evidence of ownership. Do NOT give charity points. Score what was actually said.
+${evidenceBlock ? 'If the candidate references something verifiable in the repository evidence above, reward specificity. If they claim something that contradicts the evidence, penalise authenticity.' : ''}
 
 Score this answer on FIVE dimensions (0–100 each, no artificial floor):
 
@@ -164,10 +207,9 @@ Return ONLY valid JSON — no markdown, no text outside the object:
   "follow_up_needed": <true|false>
 }`
 
-  // Key 3 (GROQ_KEY_EVALUATOR) — deep answer analysis: authenticity, reasoning, red flags
   const evalResult = await evaluateAnswer(prompt, {
     systemPrompt: 'You are a senior technical evaluator. Be fair — reward genuine effort. Return ONLY valid JSON.',
-    maxTokens: 600
+    maxTokens: 600,
   })
 
   if (!evalResult.success) return res.status(503).json({ error: 'Evaluation service unavailable — try again shortly' })
@@ -181,7 +223,6 @@ Return ONLY valid JSON — no markdown, no text outside the object:
     return res.status(503).json({ error: 'Evaluation response malformed — try again shortly' })
   }
 
-  // Key 4 (GROQ_KEY_SCORING) — validate and compute final composite score
   const clamp = n => Math.max(0, Math.min(100, Math.round(Number(n) || 0)))
   const auth  = clamp(ev.authenticity_score)
   const depth = clamp(ev.depth_score)
@@ -205,10 +246,13 @@ pass if composite≥60, hold if 35–59, fail if <35`
 
   if (scoreResult.success) {
     try {
-      const sc = JSON.parse(scoreResult.data.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim().match(/\{[\s\S]*\}/)?.[0] || '{}')
+      const sc = JSON.parse(
+        scoreResult.data.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+          .match(/\{[\s\S]*\}/)?.[0] || '{}'
+      )
       if (sc.composite_score != null) composite = clamp(Number(sc.composite_score))
       if (sc.verdict) verdict = sc.verdict
-    } catch { /* use calculated fallback */ }
+    } catch { /* use calculated composite */ }
   }
 
   res.json({
@@ -217,7 +261,8 @@ pass if composite≥60, hold if 35–59, fail if <35`
     composite_score: composite, verdict,
     strength: ev.strength || null,
     weakness: ev.weakness || null,
-    follow_up_needed: ev.follow_up_needed ?? false
+    follow_up_needed: ev.follow_up_needed ?? false,
+    rag: !!evidenceBlock,
   })
 })
 
@@ -231,14 +276,14 @@ router.get('/report/:id', (req, res) => {
   res.json(report)
 })
 
-// POST /api/exam/report — generate final certificate data
+// POST /api/exam/report — generate final certificate, purge RAG session
 router.post('/report', async (req, res) => {
-  const { candidateName, repoName, repoUrl, techStack, qaPairs } = req.body
+  const { candidateName, repoName, repoUrl, techStack, qaPairs, sessionId } = req.body
   if (!qaPairs?.length) return res.status(400).json({ error: 'qaPairs required' })
 
   const verificationId = `VRT-${new Date().getFullYear()}-${randomBytes(4).toString('hex').toUpperCase()}`
 
-  const avg = arr => Math.round(arr.reduce((s, v) => s + (Number(v) || 0), 0) / arr.length)
+  const avg   = arr => Math.round(arr.reduce((s, v) => s + (Number(v) || 0), 0) / arr.length)
   const clamp = n => Math.max(0, Math.min(100, Math.round(n)))
 
   const authenticityScore = clamp(avg(qaPairs.map(p => p.evaluation?.authenticity_score ?? 0)))
@@ -246,12 +291,7 @@ router.post('/report', async (req, res) => {
   const competencyScore   = clamp(avg(qaPairs.map(p => p.evaluation?.depth_score        ?? 0)))
   const overallScore      = clamp(avg(qaPairs.map(p => p.evaluation?.composite_score    ?? 0)))
 
-  const tier = score => {
-    if (score >= 85) return 'Distinguished'
-    if (score >= 70) return 'Proficient'
-    if (score >= 50) return 'Developing'
-    return 'Emerging'
-  }
+  const tier = s => s >= 85 ? 'Distinguished' : s >= 70 ? 'Proficient' : s >= 50 ? 'Developing' : 'Emerging'
 
   const verdict = overallScore >= 70 ? 'VERIFIED'
     : overallScore >= 50 ? 'CONDITIONAL'
@@ -268,13 +308,20 @@ router.post('/report', async (req, res) => {
       authenticity: { score: authenticityScore, tier: tier(authenticityScore) },
       ownership:    { score: ownershipScore,    tier: tier(ownershipScore)    },
       competency:   { score: competencyScore,   tier: tier(competencyScore)   },
-      overall: overallScore
+      overall: overallScore,
     },
     verdict,
-    shareUrl: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify/${verificationId}`
+    ragEnabled: isRagEnabled(),
+    shareUrl: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify/${verificationId}`,
   }
 
   reportStore.set(verificationId, report)
+
+  // Purge pgvector session vectors now that the report is saved
+  if (sessionId && isRagEnabled()) {
+    purgeSession(sessionId).catch(err => console.warn('[RAG] Purge failed:', err.message))
+  }
+
   res.json(report)
 })
 

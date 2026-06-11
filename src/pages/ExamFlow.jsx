@@ -275,6 +275,7 @@ export default function ExamFlow() {
   const [progressDone, setProgressDone] = useState([])
   const [analyzeErr, setAnalyzeErr]   = useState('')
   const [repoCtx, setRepoCtx]         = useState(null)
+  const [sessionId, setSessionId]     = useState(null)
   const [questions, setQuestions]     = useState([])
   const [qIndex, setQIndex]           = useState(0)
   const [answer, setAnswer]           = useState('')
@@ -421,6 +422,7 @@ export default function ExamFlow() {
         ? qData.questions
         : [{ id: 1, question: `Walk me through the architecture of ${ctx.name}`, area: 'architecture', evidence: 'General' }]
       setProgressDone([...PROGRESS_STEPS])
+      setSessionId(qData.sessionId || null)
       setQuestions(qs)
       setTimeout(() => { setStep(STEPS.BLUEPRINT); scrollTop() }, 600)
     } catch (err) {
@@ -439,7 +441,7 @@ export default function ExamFlow() {
       const projectContext = `${repoCtx?.name}: ${repoCtx?.description || ''} | Tech: ${(repoCtx?.techStack || []).join(', ')}`
       const evRes = await fetch(`${API}/api/exam/evaluate`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: questions[qIndex].question, answer: answer.trim(), projectContext, priorQA, questionNumber: qIndex + 1 })
+        body: JSON.stringify({ question: questions[qIndex].question, answer: answer.trim(), projectContext, priorQA, questionNumber: qIndex + 1, sessionId })
       })
       const ev = evRes.ok ? await evRes.json() : { composite_score: 0, verdict: 'fail', strength: null, weakness: null }
       setQaPairs(prev => [...prev, {
@@ -472,7 +474,7 @@ export default function ExamFlow() {
       try {
         const rRes = await fetch(`${API}/api/exam/report`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ candidateName: name, repoName: repoCtx?.name, repoUrl: repoCtx?.repoUrl, techStack: repoCtx?.techStack, qaPairs })
+          body: JSON.stringify({ candidateName: name, repoName: repoCtx?.name, repoUrl: repoCtx?.repoUrl, techStack: repoCtx?.techStack, qaPairs, sessionId })
         })
         if (rRes.ok) setReport(await rRes.json())
       } catch { /* non-critical */ }
