@@ -82,8 +82,8 @@ This means a rate limit burst on answer evaluation never blocks question generat
 
 Graceful degradation: if either env var is absent, the exam falls back to raw context with zero errors.
 
-### 6. Shareable Certificates Without a Database
-`backend/src/routes/exam.js` (reportStore) + `src/pages/VerifyReport.jsx` — Reports are stored in a server-side `Map()`. No database required. Each certificate gets a unique `VRT-2026-XXXXXXXX` verification ID and a public URL at `/verify/:id`. The verification page is public, no login required, and includes print CSS for PDF export.
+### 6. Durable Certificates via Neon
+`backend/src/services/db/reports.js` + `backend/migrations/002_reports.sql` — Reports are persisted to the `exam_reports` table in Neon Postgres (same database as the RAG pipeline). Each certificate survives Render restarts and redeployments. Falls back to an in-memory `Map()` when `DATABASE_URL` is not set. Each certificate gets a unique `VRT-2026-XXXXXXXX` verification ID and a public URL at `/verify/:id`. The verification page is public, no login required, and includes print CSS for PDF export.
 
 ## Scoring Algorithm
 

@@ -31,12 +31,12 @@ async function setCached(key, value) {
 
 // GET /api/ai/status — check AI availability
 router.get('/status', (req, res) => {
-  const key1 = !!process.env.ANTHROPIC_API_KEY
-  const key2 = !!process.env.ANTHROPIC_API_KEY_2
+  const groqKeys = ['GROQ_KEY_ANALYSIS', 'GROQ_KEY_QUESTIONS', 'GROQ_KEY_EVALUATOR', 'GROQ_KEY_SCORING']
+    .filter(k => !!process.env[k])
   res.json({
-    available: key1,
-    model: 'claude-haiku-4-5',
-    keys: key1 && key2 ? 2 : key1 ? 1 : 0
+    available: groqKeys.length > 0,
+    model: 'llama-3.3-70b-versatile',
+    keys: groqKeys.length,
   })
 })
 

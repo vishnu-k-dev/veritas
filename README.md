@@ -187,8 +187,8 @@ At evaluation time, the candidate's answer is embedded and the top-8 most releva
 
 Both `DATABASE_URL` (Neon) and `COHERE_API_KEY` are optional. Without them the exam runs normally on raw context.
 
-### Shareable Certificates Without a Database
-Each exam produces a `VRT-2026-XXXXXXXX` verification ID stored in a server-side `Map()`. The public `/verify/:id` page renders the full certificate — no login, includes print CSS for PDF export.
+### Durable Certificates via Neon
+Each exam produces a `VRT-2026-XXXXXXXX` verification ID persisted to the `exam_reports` table in Neon Postgres (same database as the RAG pipeline). Certificates survive Render restarts and redeployments. Falls back to in-memory storage when `DATABASE_URL` is absent. The public `/verify/:id` page renders the full certificate — no login, includes print CSS for PDF export.
 
 ---
 
@@ -204,7 +204,7 @@ Each exam produces a `VRT-2026-XXXXXXXX` verification ID stored in a server-side
 | Vector DB | Neon Postgres · pgvector · HNSW cosine index |
 | GitHub | REST API v3 · unauthenticated · 60 req/hr |
 | Repo Analysis | Deterministic rule-based (zero LLM) |
-| Certificates | In-memory Map · `/verify/:id` public route |
+| Certificates | Neon Postgres · `/verify/:id` public route · fallback to memory |
 
 ---
 

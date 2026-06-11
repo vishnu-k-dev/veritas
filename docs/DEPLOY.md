@@ -103,7 +103,7 @@ When RAG is active, the backend logs on each exam:
 ## Notes
 
 - Render free tier spins down after 15 min of inactivity — first request after sleep takes ~30s
-- Reports are stored in-memory; they reset when Render redeploys or sleeps
+- Reports are stored in Neon Postgres (`exam_reports` table) — they persist across Render restarts
 - RAG session vectors are purged from Neon automatically when the final report is generated
 - `VITE_API_URL` is baked into the frontend bundle at build time — changing it requires a Vercel redeploy
 - `DATABASE_URL` and `COHERE_API_KEY` are optional — the exam works without them (falls back to raw context)

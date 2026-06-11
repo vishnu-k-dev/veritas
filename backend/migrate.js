@@ -1,24 +1,33 @@
-// One-shot migration runner — node migrate.js
+// One-shot migration runner — node migrate.js (from backend/)
 import 'dotenv/config'
 import { Pool } from 'pg'
-import { readFileSync } from 'fs'
+import { readFileSync, readdirSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
 const __dir = dirname(fileURLToPath(import.meta.url))
-const sql = readFileSync(join(__dir, 'migrations/001_rag.sql'), 'utf8')
+const migrationsDir = join(__dir, 'migrations')
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 })
 
-try {
-  await pool.query(sql)
-  console.log('✓ Migration complete — pgvector schema ready')
-} catch (err) {
-  console.error('✗ Migration failed:', err.message)
-  process.exit(1)
-} finally {
-  await pool.end()
+const files = readdirSync(migrationsDir)
+  .filter(f => f.endsWith('.sql'))
+  .sort()
+
+for (const file of files) {
+  const sql = readFileSync(join(migrationsDir, file), 'utf8')
+  try {
+    await pool.query(sql)
+    console.log(`✓ ${file}`)
+  } catch (err) {
+    console.error(`✗ ${file}:`, err.message)
+    await pool.end()
+    process.exit(1)
+  }
 }
+
+console.log('✓ All migrations complete')
+await pool.end()

@@ -3,6 +3,7 @@
 // ~8 API calls per session; well within 60 req/hour unauthenticated
 
 const GH = 'https://api.github.com'
+const GITHUB_TOKEN = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GITHUB_TOKEN : null
 
 export function parseGitHubUrl(url) {
   const cleaned = url.trim().replace(/\/$/, '').replace(/\.git$/, '')
@@ -14,10 +15,10 @@ export function parseGitHubUrl(url) {
   return null
 }
 
-async function ghGet(path) {
-  const res = await fetch(`${GH}${path}`, {
-    headers: { Accept: 'application/vnd.github.v3+json' }
-  })
+async function ghGet(path, token = GITHUB_TOKEN) {
+  const headers = { Accept: 'application/vnd.github.v3+json' }
+  if (token) headers['Authorization'] = `Bearer ${token}`
+  const res = await fetch(`${GH}${path}`, { headers })
   if (res.status === 404) throw new Error('Repository not found or is private')
   if (res.status === 403) throw new Error('GitHub API rate limit reached — try again in a minute')
   if (!res.ok) {

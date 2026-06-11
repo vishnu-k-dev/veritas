@@ -29,7 +29,20 @@ const app = express()
 const IS_PROD = process.env.NODE_ENV === 'production'
 
 // ── Security headers ──────────────────────────────────────────────────────────
-app.use(helmet({ contentSecurityPolicy: false, hsts: IS_PROD }))
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc:  ["'self'"],
+      scriptSrc:   ["'self'"],
+      styleSrc:    ["'self'", "'unsafe-inline'"],
+      imgSrc:      ["'self'", 'data:'],
+      connectSrc:  ["'self'"],
+      frameSrc:    ["'none'"],
+      objectSrc:   ["'none'"],
+    },
+  },
+  hsts: IS_PROD,
+}))
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'

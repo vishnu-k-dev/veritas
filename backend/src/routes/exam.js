@@ -2,13 +2,37 @@
 // No-auth public examination routes — candidate flow
 import { Router } from 'express'
 import { randomBytes } from 'crypto'
-import { generateQuestions, evaluateAnswer, computeScores } from '../services/ai/index.js'
+import rateLimit from 'express-rate-limit'
+import { generateQuestions, evaluateAnswer } from '../services/ai/index.js'
 import { isRagEnabled, indexRepo, retrieveForQuestions, retrieveEvidence, purgeSession } from '../services/rag/indexer.js'
+import { saveReport, getReport, isDbEnabled } from '../services/db/reports.js'
 
 const router = Router()
 
+// Per-IP rate limits for the expensive exam endpoints
+const questionsLimit = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  keyGenerator: req => req.ip,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Maximum 5 exam sessions per hour. Try again later.' },
+})
+
+const evaluateLimit = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 30,
+  keyGenerator: req => req.ip,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Maximum 30 evaluations per hour. Try again later.' },
+})
+
+// In-memory fallback when DATABASE_URL is not set
+const reportMemStore = new Map()
+
 // POST /api/exam/questions — index repo into pgvector, generate viva questions
-router.post('/questions', async (req, res) => {
+router.post('/questions', questionsLimit, async (req, res) => {
   const { repoContext, resumeText } = req.body
   if (!repoContext) return res.status(400).json({ error: 'repoContext required' })
 
@@ -111,7 +135,7 @@ Return ONLY a JSON array, no markdown, no explanation:
 })
 
 // POST /api/exam/evaluate — evaluate a single candidate answer with RAG evidence grounding
-router.post('/evaluate', async (req, res) => {
+router.post('/evaluate', evaluateLimit, async (req, res) => {
   const { question: rawQuestion, answer: rawAnswer, projectContext, priorQA, questionNumber, sessionId } = req.body
   if (!rawQuestion || !rawAnswer) return res.status(400).json({ error: 'question and answer required' })
 
@@ -230,30 +254,9 @@ Return ONLY valid JSON — no markdown, no text outside the object:
   const comm  = clamp(ev.communication_score)
   const cons  = clamp(ev.consistency_score)
 
-  const scorePrompt = `Given these raw dimension scores from an answer evaluation:
-authenticity=${auth}, depth=${depth}, specificity=${spec}, communication=${comm}, consistency=${cons}
-
-Weights: authenticity×0.45 + depth×0.25 + specificity×0.15 + communication×0.10 + consistency×0.05
-No minimum — score honestly. A one-word answer like "ok" should score under 10.
-
-Return ONLY: { "composite_score": <number>, "verdict": "<pass|hold|fail>" }
-pass if composite≥60, hold if 35–59, fail if <35`
-
-  const scoreResult = await computeScores(scorePrompt, { maxTokens: 80 })
-
-  let composite = clamp(Math.round(auth * 0.45 + depth * 0.25 + spec * 0.15 + comm * 0.10 + cons * 0.05))
-  let verdict = composite >= 60 ? 'pass' : composite >= 35 ? 'hold' : 'fail'
-
-  if (scoreResult.success) {
-    try {
-      const sc = JSON.parse(
-        scoreResult.data.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-          .match(/\{[\s\S]*\}/)?.[0] || '{}'
-      )
-      if (sc.composite_score != null) composite = clamp(Number(sc.composite_score))
-      if (sc.verdict) verdict = sc.verdict
-    } catch { /* use calculated composite */ }
-  }
+  // Compute composite deterministically from Key 3 dimensions — no Key 4 call needed
+  const composite = clamp(Math.round(auth * 0.45 + depth * 0.25 + spec * 0.15 + comm * 0.10 + cons * 0.05))
+  const verdict = composite >= 60 ? 'pass' : composite >= 35 ? 'hold' : 'fail'
 
   res.json({
     authenticity_score: auth, depth_score: depth, specificity_score: spec,
@@ -266,14 +269,21 @@ pass if composite≥60, hold if 35–59, fail if <35`
   })
 })
 
-// In-memory report store — survives server session, shareable by verificationId
-const reportStore = new Map()
-
 // GET /api/exam/report/:id — fetch a saved report by verification ID
-router.get('/report/:id', (req, res) => {
-  const report = reportStore.get(req.params.id)
-  if (!report) return res.status(404).json({ error: 'Report not found' })
-  res.json(report)
+router.get('/report/:id', async (req, res) => {
+  const id = req.params.id
+  try {
+    if (isDbEnabled()) {
+      const report = await getReport(id)
+      if (report) return res.json(report)
+    }
+    const mem = reportMemStore.get(id)
+    if (mem) return res.json(mem)
+    res.status(404).json({ error: 'Report not found' })
+  } catch (err) {
+    console.error('[report/get]', err.message)
+    res.status(500).json({ error: 'Failed to retrieve report' })
+  }
 })
 
 // POST /api/exam/report — generate final certificate, purge RAG session
@@ -315,7 +325,17 @@ router.post('/report', async (req, res) => {
     shareUrl: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify/${verificationId}`,
   }
 
-  reportStore.set(verificationId, report)
+  // Persist — Neon Postgres if available, in-memory Map as fallback
+  try {
+    if (isDbEnabled()) {
+      await saveReport(report)
+    } else {
+      reportMemStore.set(verificationId, report)
+    }
+  } catch (err) {
+    console.error('[report/save]', err.message)
+    reportMemStore.set(verificationId, report) // fallback on DB error
+  }
 
   // Purge pgvector session vectors now that the report is saved
   if (sessionId && isRagEnabled()) {

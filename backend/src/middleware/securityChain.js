@@ -209,19 +209,8 @@ export function verifyCIMWebhook(req, res, next) {
  * Never throws — must not block the request chain.
  */
 export function logSecurityEvent(req, type, detail) {
-  const payload = {
-    user_id:    req.user?.dbUser?.id || null,
-    event_type: type,
-    detail:     (detail || '').slice(0, 200),
-    ip:         req.ip || null,
-    user_agent: (req.headers?.['user-agent'] || '').slice(0, 200),
-    timestamp:  new Date().toISOString(),
-  }
-
-  supabaseAdmin
-    .from('security_events')
-    .insert(payload)
-    .catch(err => console.error('[SecurityChain] Log failed:', err.message))
+  // Log locally — Supabase security_events table not provisioned in this deployment
+  console.warn('[security]', type, (detail || '').slice(0, 200), req.ip || '')
 }
 
 // ─── CONVENIENCE CHAIN BUILDER ────────────────────────────────────────────────
