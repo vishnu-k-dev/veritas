@@ -202,7 +202,7 @@ Each exam produces a `VRT-2026-XXXXXXXX` verification ID persisted to the `exam_
 | AI | Groq API · Llama-3.3-70b-versatile · 4 dedicated keys |
 | Embeddings | Cohere `embed-english-v3.0` · 1024 dimensions · batched |
 | Vector DB | Neon Postgres · pgvector · HNSW cosine index |
-| GitHub | REST API v3 · unauthenticated · 60 req/hr |
+| GitHub | REST API v3 · optional PAT · 60 → 5,000 req/hr with token |
 | Repo Analysis | Deterministic rule-based (zero LLM) |
 | Certificates | Neon Postgres · `/verify/:id` public route · fallback to memory |
 
@@ -235,6 +235,12 @@ DATABASE_URL=postgresql://...@...neon.tech/neondb?sslmode=require
 COHERE_API_KEY=...
 ```
 
+Create `.env` (frontend, repo root):
+```
+VITE_API_URL=http://localhost:3001
+VITE_GITHUB_TOKEN=ghp_...   # optional — lifts GitHub API rate limit from 60 → 5,000 req/hr
+```
+
 If using RAG, run the migration once: `node migrate.js` from the `backend/` directory.
 
 ```bash
@@ -246,10 +252,52 @@ Open `http://localhost:5173/exam` — no login required.
 
 ---
 
-## Deployment
+## Live Deployment
 
-- **Frontend** → Vercel · **Backend** → Render
-- See [`docs/DEPLOY.md`](docs/DEPLOY.md) for step-by-step
+| Service | URL |
+|---|---|
+| **Frontend** (Vercel) | [veritas-examination.vercel.app](https://veritas-examination.vercel.app) |
+| **Backend** (Render) | [veritas-rgox.onrender.com](https://veritas-rgox.onrender.com) |
+| **Database** (Neon) | Postgres + pgvector · `ap-southeast-1` region |
+
+> **Note:** Render free tier spins down after inactivity. First request after idle may take 30–50s. The frontend fires a warmup ping to `/api/ping` on load to pre-warm the server.
+
+### Deploying your own instance
+
+**Backend → Render**
+
+1. New Web Service → connect repo → Root Directory: `backend`
+2. Build: `npm install` · Start: `node server.js`
+3. Environment variables (all secret):
+
+```
+GROQ_KEY_ANALYSIS=gsk_...
+GROQ_KEY_QUESTIONS=gsk_...
+GROQ_KEY_EVALUATOR=gsk_...
+GROQ_KEY_SCORING=gsk_...
+DATABASE_URL=postgresql://...@...neon.tech/neondb?sslmode=require
+COHERE_API_KEY=...
+NODE_ENV=production
+PORT=3001
+FRONTEND_URL=https://your-vercel-url.vercel.app
+CORS_ALLOWED_ORIGINS=https://your-vercel-url.vercel.app
+```
+
+**Frontend → Vercel**
+
+1. New Project → import repo → Framework: Vite · Root: `/`
+2. Environment variable:
+
+```
+VITE_API_URL=https://your-render-url.onrender.com
+VITE_GITHUB_TOKEN=ghp_...   ← optional, lifts GitHub API from 60 → 5,000 req/hr
+```
+
+**Database migrations** (run once from `backend/`):
+```bash
+node migrate.js
+```
+Creates `repo_chunks` (RAG), `exam_reports` (certificates), and all indexes.
 
 ---
 
