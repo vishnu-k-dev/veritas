@@ -1,89 +1,125 @@
 # VERITAS
 
-> **The examination that knows what you built.**
-
-Paste a public GitHub repository. VERITAS reads your commits, your file structure, your architectural decisions — then conducts a five-question written examination on what you *actually* built. No question bank. No generic MCQs. No way to prepare except by having genuinely built the project.
-
-Built for **Far Away 2026** · Theme: *Examinations — Reimagine the future of examinations with secure, fair and intelligent solutions.*
+> *The examination that knows what you actually built.*
 
 ---
 
-## The Problem
+## The System Is Rigged — Just Not Against Who You Think
 
-The credibility infrastructure for technical skills is broken at every level:
+Imagine you spent six months building something real.
 
-- A developer lists "built a full-stack e-commerce platform" — it's a YouTube tutorial they followed
-- A student submits a final-year project — it's a GitHub repo they found and barely modified  
-- A candidate says "I know React deeply" — they memorised answers from interview prep sites
+Late nights debugging a race condition nobody warned you about. Three rewrites of the auth flow before it finally made sense. A README you wrote at 2am that actually explains why you made the decisions you made.
 
-Traditional solutions fail because they ask generic questions that any LLM can answer and any determined person can memorise. The question bank *is* the vulnerability.
+Now imagine the person sitting next to you in the interview memorised StackOverflow answers for a week.
 
-**VERITAS eliminates the question bank entirely.** Your own repository is the exam paper.
+**You both get the same question: "Tell me about a challenging project you worked on."**
+
+They answer fluently. You answer honestly. The interviewer cannot tell the difference.
+
+That is not an examination. That is a coin flip — and the coin is weighted against the people who actually did the work.
+
+---
+
+## Not Fair — For Everyone
+
+### For the student who actually built it
+Your final-year project took eight months. Theirs was a GitHub repo they forked and renamed. The viva examiner asks "what framework did you use?" You both answer "React." You both pass. **Nothing in the examination proved who built what.**
+
+### For the institution trying to award merit
+Your degree is only worth what the weakest person who got it had to prove. If the examination can be passed by someone who copied the project and memorised a few answers, then the degree signals completion — not competence. Every genuine student's credential is diluted.
+
+### For the hiring team making real bets
+A wrong hire costs ₹8–15 lakh in India before you factor in the work that didn't get done. Most technical screens still use the same question bank that has been on GeeksForGeeks since 2018. The person who crammed it beats the person who built it, every time — because the exam doesn't know the difference.
+
+**VERITAS is fair because it is impossible to fake.** There is no question bank. The questions come from your own commit history — decisions you made six months ago, files you named, errors you actually encountered. You can only answer them if you were actually there.
+
+---
+
+## Not Secure — And Getting Worse Fast
+
+### The question bank is already compromised
+Within days of any new technical exam going live, its questions appear on prep forums. Companies spend thousands designing question sets. Candidates spend ₹500 on a prep course that has all the answers. The entire exercise becomes a test of who is better at googling "top 50 [company] interview questions."
+
+### Resumes and portfolios cannot be verified
+A GitHub profile with 400 stars means nothing if the person didn't write the code. A portfolio project means nothing if it was vibe-coded with AI and the developer cannot explain a single decision in it. There is no mechanism to check.
+
+### AI has made the signal completely dead
+ChatGPT can ace any generic technical interview today. It can answer "explain the difference between TCP and UDP" more eloquently than most senior engineers. Any exam that asks questions with known answers is now trivially solvable by pasting into a chat window. The 2024 crop of candidates has grown up knowing this. The examiners mostly haven't caught up.
+
+**VERITAS is secure because the question is your own history.** A question like *"Why did you remove Redux from your state management in commit a3f9c2b and what did you replace it with?"* cannot be answered by ChatGPT, cannot be found on any prep site, and cannot be memorised the night before — because it didn't exist until VERITAS read your repository. The proctoring layer (paste blocked, tab switches logged, typing velocity analysed) makes it harder to cheat in real time. But the deeper security is structural: **there is nothing to cheat from.**
+
+---
+
+## Not Intelligent — Asking What When It Should Ask Why
+
+### Generic questions have no signal anymore
+"What is the difference between `==` and `===`?" is the top result for "JavaScript interview questions" on three different websites. It tells you nothing about whether the candidate has ever shipped JavaScript. A person who has never opened a code editor can answer it after ten minutes of reading.
+
+### The exam measures memory, not judgment
+Good engineers make decisions under uncertainty. They choose between tradeoffs they can defend. They have debugging stories — not because they read about debugging, but because they actually got stuck and had to think their way out. No MCQ captures this. No "tell me about a challenging project" prompt reliably surfaces it.
+
+### The interview is easy to game and hard to assess
+Candidates are coached to use the STAR method. Interviewers are coached to probe for specifics. The whole conversation becomes a structured performance that both sides know is slightly artificial. The actual work — the commits, the PRs, the decisions — sits on GitHub untouched.
+
+**VERITAS is intelligent because it asks *why*, not *what*.** The AI doesn't ask "what is a REST API?" It asks "You chose Express over Fastify for this project — what made you make that call, and given what you know now, would you change it?" That question has no generic answer. It can only be answered by someone who actually stood at that decision point. The scoring engine rewards specificity — naming files, citing error messages, referencing actual tradeoffs — and gives near-zero credit to correct-but-generic answers.
+
+---
+
+## The Shift
+
+| The old way | VERITAS |
+|---|---|
+| Questions from a bank anyone can study | Questions from your own commit history |
+| Anyone who memorised the right things passes | Only someone who was actually there can answer |
+| Paste from ChatGPT, nobody knows | Paste is blocked, tab switches logged, velocity tracked |
+| Scores inflated to avoid awkward conversations | No score floor — honest measurement, every time |
+| "Great interview!" → wrong hire three months later | Verification ID + public certificate anyone can check |
+| Same exam for everyone | Every exam is unique to one candidate and one repository |
 
 ---
 
 ## How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        VERITAS PIPELINE                             │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  GitHub Repo URL                                                    │
-│       │                                                             │
-│       ▼                                                             │
-│  GitHub REST API  ──── 7 calls, unauthenticated ────────────────── │
-│  (metadata · commits · languages · file tree · README · package)   │
-│       │                                                             │
-│       ▼                                                             │
-│  Deterministic Repo Analysis  ──── ZERO LLM COST ──────────────── │
-│  (framework detect · architecture classify · tech stack extract)   │
-│       │                                                             │
-│       ▼                                                             │
-│  Groq / Llama-3.3-70b  ──── Key 2: Question Generation ─────────  │
-│  5 questions, each citing a specific commit or design decision      │
-│       │                                                             │
-│       ▼                                                             │
-│  Proctored Written Examination                                      │
-│  (paste blocked · tab switches logged · typing velocity analysed)  │
-│       │                                                             │
-│  Per answer:                                                        │
-│  Groq / Llama-3.3-70b  ──── Key 3: Answer Analysis ─────────────  │
-│  Groq / Llama-3.3-70b  ──── Key 4: Score Computation ───────────  │
-│       │                                                             │
-│       ▼                                                             │
-│  Grade Card + Integrity Report + Shareable Certificate             │
-│  /verify/:id  ──── public URL, no login required ───────────────  │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
+  GitHub Repo URL
+        |
+        v
+  GitHub REST API  (7 calls, unauthenticated)
+  metadata · commits · languages · file tree · README · package.json
+        |
+        v
+  Deterministic Repo Analysis  [ZERO LLM — pure rule-based]
+  framework detect · architecture classify · tech stack extract
+        |
+        v
+  Groq / Llama-3.3-70b  [Key 2: Question Generation]
+  5 questions — each cites a specific commit or design decision
+        |
+        v
+  Proctored Written Examination
+  paste blocked · tab switches logged · typing velocity analysed
+        |
+  per answer:
+  Groq / Llama-3.3-70b  [Key 3: Answer Analysis]
+  Groq / Llama-3.3-70b  [Key 4: Score Computation]
+        |
+        v
+  Grade Card + Integrity Report
+  Verification ID · /verify/:id · shareable, no login required
 ```
 
 ---
 
-## What Makes This Different
-
-| Dimension | Traditional Exam | AI Question Bank | VERITAS |
-|---|---|---|---|
-| Question source | Static bank | AI-generated generic | Candidate's own commits |
-| Preparable? | Yes — memorise | Yes — LLM can answer | No — specific to your code |
-| Leakable? | Yes | Yes | No |
-| Proctoring | Human invigilator | None | Pure-JS, no extensions |
-| Score honesty | Pass/fail binary | Inflated | Weighted 5-dimension, no floor |
-| Proof of authorship | None | None | Verification ID + public URL |
-| Cost per exam | High | Medium | ~₹0.50 in API credits |
-
----
-
-## Scoring Methodology
+## Scoring
 
 Five dimensions, weighted by predictive validity for authorship confidence:
 
-| Dimension | Weight | Signals examined |
+| Dimension | Weight | What it measures |
 |---|---|---|
-| **Authenticity** | 45% | Files named, errors cited, config values referenced, commit SHAs |
-| **Depth** | 25% | WHY decisions were made, tradeoffs considered, alternatives ruled out |
+| **Authenticity** | 45% | Files named, errors cited, config values, commit SHAs |
+| **Depth** | 25% | WHY the decision, tradeoffs, alternatives ruled out |
 | **Specificity** | 15% | Numbers, paths, version pins, actual error messages |
-| **Communication** | 10% | Clarity, structure, logical flow |
+| **Communication** | 10% | Clarity and logical structure |
 | **Consistency** | 5% | Coherence across all five answers |
 
 ```
@@ -94,49 +130,46 @@ CONDITIONAL   50–69  — partial ownership confirmed
 NEEDS REVIEW  < 50   — insufficient evidence of authorship
 ```
 
-**No artificial score floor.** A one-word answer ("ok", "yes") scores 5–10 across all dimensions.
+No artificial score floor. A one-word answer scores 5–10. Honest measurement, every time.
 
 ---
 
 ## Proctoring — No Extensions Required
 
-Implemented entirely in the browser with standard Web APIs:
+Seven signals, implemented entirely with standard browser Web APIs:
 
 | Signal | Implementation | Effect |
 |---|---|---|
 | Tab switch | `visibilitychange` event | Full-screen overlay + strike counter |
-| Paste attempt | `paste` event → `preventDefault()` | Blocked + warning toast |
+| Paste attempt | `paste` → `preventDefault()` | Blocked + warning toast |
 | Copy tracking | `copy` event listener | Logged throughout exam |
-| Typing velocity | WPM calculation at submit | >200 WPM with >40 words = flagged |
-| Bulk input | `onChange` delta check | >80 chars in one event = suspicious |
+| Typing velocity | WPM at submit | >200 WPM with >40 words = flagged |
+| Bulk input | `onChange` delta | >80 chars in one event = suspicious |
 | Right-click | `onContextMenu` → `preventDefault()` | Disabled on question cards |
 | Text selection | `user-select: none` | Disabled on all question content |
 
-All flags are aggregated into an **Integrity Report** on the final grade card. Scores are evaluated independently — flags are advisory, not punitive.
+All flags appear in the Integrity Report on the grade card. Scores are evaluated independently — the AI does not know about the flags when it scores.
 
 ---
 
 ## Architecture
 
 ### Deterministic Repository Analysis
-`src/engine/repoAnalysis.js` runs entirely without any LLM. Framework detection, architecture classification (monolith / microservices / serverless / JAMstack), system type inference, and tech stack extraction use rule-based pattern matching over file trees and dependency lists. The LLM receives a clean structured context object — it never reads raw source code.
+`src/engine/repoAnalysis.js` runs entirely without an LLM. Framework detection, architecture classification (monolith / microservices / serverless / JAMstack), system type inference, and tech stack extraction use rule-based pattern matching over file trees and dependency lists. The LLM receives a clean structured object — it never reads raw source code.
 
-This design means: zero AI cost for the analysis phase, fully reproducible results, no hallucination risk on the repo facts.
+Result: zero AI cost for analysis, fully reproducible across runs, zero hallucination risk on the repo facts.
 
 ### 4-Key Groq Architecture
-Each AI role has its own Groq API key and independent rate-limit budget:
-
 ```
 GROQ_KEY_ANALYSIS   → Key 1 — context orchestration, fallback
 GROQ_KEY_QUESTIONS  → Key 2 — viva question generation
 GROQ_KEY_EVALUATOR  → Key 3 — per-answer analysis
 GROQ_KEY_SCORING    → Key 4 — composite score computation
 ```
-
-A rate-limit burst on answer evaluation never starves question generation. In concurrent multi-user sessions, the four queues are completely independent.
+Each role has its own independent rate-limit budget. A burst on answer evaluation never blocks question generation for another user.
 
 ### Shareable Certificates Without a Database
-Each completed exam generates a `VRT-2026-XXXXXXXX` verification ID. The report is stored in a server-side `Map()`. The public `/verify/:id` page fetches and renders the full certificate — no login required, includes print CSS for PDF export.
+Each exam produces a `VRT-2026-XXXXXXXX` verification ID stored in a server-side `Map()`. The public `/verify/:id` page renders the full certificate — no login, includes print CSS for PDF export.
 
 ---
 
@@ -159,14 +192,9 @@ Each completed exam generates a `VRT-2026-XXXXXXXX` verification ID. The report 
 **Prerequisites:** Node.js 18+, 4 Groq API keys (free at [console.groq.com](https://console.groq.com))
 
 ```bash
-# Clone
 git clone https://github.com/vishnu-k-dev/veritas.git
 cd veritas
-
-# Frontend
 npm install
-
-# Backend
 cd backend && npm install
 ```
 
@@ -183,11 +211,8 @@ GROQ_KEY_SCORING=gsk_...
 ```
 
 ```bash
-# Start backend (from backend/)
-node server.js
-
-# Start frontend (from root, separate terminal)
-npm run dev
+node server.js          # from backend/
+npm run dev             # from root, separate terminal
 ```
 
 Open `http://localhost:5173/exam` — no login required.
@@ -196,22 +221,20 @@ Open `http://localhost:5173/exam` — no login required.
 
 ## Deployment
 
-- **Frontend** → Vercel (connect repo, set `VITE_API_URL` env var)
-- **Backend** → Render (use `render.yaml`, set 4 Groq keys in dashboard)
-
-See [`docs/DEPLOY.md`](docs/DEPLOY.md) for step-by-step instructions.
+- **Frontend** → Vercel · **Backend** → Render
+- See [`docs/DEPLOY.md`](docs/DEPLOY.md) for step-by-step
 
 ---
 
 ## Security
 
 - No secrets in repository — `.env` files gitignored
-- CORS restricted to configured frontend origin only
-- Rate limiting on all API endpoints (`express-rate-limit`)
-- Input sanitisation middleware on all routes
-- GitHub access is read-only, unauthenticated, public repos only
-- No user data persisted beyond server session lifetime
+- CORS restricted to configured frontend origin
+- Rate limiting on all API endpoints
+- Input sanitisation on all routes
+- GitHub access is read-only, public repos only
+- No user data persisted beyond server session
 
 ---
 
-*Far Away 2026 · Examinations · Solo submission*
+*Far Away 2026 · Examinations — Reimagine the future of examinations with secure, fair and intelligent solutions · Solo submission*
