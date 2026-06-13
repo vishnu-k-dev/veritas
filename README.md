@@ -344,4 +344,18 @@ From there: built the GitHub ingestion pipeline, a deterministic repo analysis e
 
 ---
 
-*Far Away 2026 · Examinations — Reimagine the future of examinations with secure, fair and intelligent solutions · Solo submission*
+---
+
+## Team
+
+**Team name:** vishnuk2006
+
+| Member | |
+|---|---|
+| Vishnu K | |
+| Revanth M | |
+| Rishi S | |
+
+---
+
+*Far Away 2026 · Examinations — Reimagine the future of examinations with secure, fair and intelligent solutions*
