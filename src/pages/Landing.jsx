@@ -451,7 +451,7 @@ export default function Landing({ onGetStarted }) {
         },
         {
             q: "What's in this demo?",
-            a: "One complete examinee journey: Rahul's evidence becomes a Blueprint, the Blueprint becomes an adaptive viva, the viva becomes a verified report — and the Institution Review Console shows how an examiner audits all of it. Use the journey bar at the top of each screen to navigate.",
+            a: "One complete examination from start to finish. Paste any public GitHub repository, watch VERITAS read the commits and build a personalised Blueprint, answer five questions in the proctored viva, and receive a verified report with a shareable certificate ID. No login. No setup. Under ten minutes.",
         },
     ];
 
