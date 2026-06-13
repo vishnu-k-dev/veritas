@@ -560,6 +560,13 @@ export default function ExamFlow() {
             <div style={{ marginBottom: 6, fontFamily: 'var(--fm)', fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--muted)' }}>Examination · Public Beta</div>
             <h1>Your work.<br />Your <em>examination.</em></h1>
             <p className="sub">Paste a public GitHub repository. VERITAS reads your code, your commits, your decisions — then examines you on what you actually built.</p>
+            <div style={{ marginTop: 18, marginBottom: 8, display: 'flex', alignItems: 'flex-start', gap: 10, background: 'rgba(142,42,27,0.06)', border: '1px solid rgba(142,42,27,0.18)', borderRadius: 3, padding: '12px 16px' }}>
+              <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>⏳</span>
+              <p style={{ fontFamily: 'var(--fm)', fontSize: 11.5, color: 'var(--soft)', lineHeight: 1.6, margin: 0 }}>
+                <strong style={{ color: 'var(--text)', fontWeight: 600 }}>Heads up — </strong>
+                we're on Render's free tier, which sleeps after inactivity. The first request may take <strong style={{ color: 'var(--text)' }}>30–50 seconds</strong> to wake up. Please be patient — it will come through.
+              </p>
+            </div>
             <form className="ef-form" onSubmit={handleStart} noValidate>
               <div>
                 <label className="ef-label">Your name</label>
