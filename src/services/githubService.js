@@ -52,7 +52,7 @@ export async function analyzeRepository(owner, repo, onProgress) {
 
   onProgress?.('Loading commit history…')
   const [commits, languages] = await Promise.all([
-    ghGet(`/repos/${owner}/${repo}/commits?per_page=20`).catch(() => []),
+    ghGet(`/repos/${owner}/${repo}/commits?per_page=100`).catch(() => []),
     ghGet(`/repos/${owner}/${repo}/languages`).catch(() => ({})),
   ])
 

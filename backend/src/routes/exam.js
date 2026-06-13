@@ -77,8 +77,8 @@ ${ragContext}`
     const langStr = Object.entries(languages || {})
       .sort((a, b) => b[1] - a[1]).slice(0, 4).map(([l]) => l).join(', ')
 
-    const commitLines = (commits || []).slice(0, 10)
-      .map(c => `  ${c.sha?.slice(0, 7) || '???????'} "${c.message}" — ${c.author}`)
+    const commitLines = (commits || []).slice(0, 50)
+      .map((c, i) => `  ${String(i + 1).padStart(2, '0')}. ${c.sha?.slice(0, 7) || '???????'} [${c.date?.slice(0, 10) || '????-??-??'}] "${c.message}" — ${c.author}`)
       .join('\n')
 
     contextBlock = `PROJECT: ${name}
@@ -87,9 +87,12 @@ Languages: ${langStr || 'unknown'}
 Tech stack: ${(techStack || []).join(', ') || 'unknown'}
 Architecture: ${architecture || 'unknown'}
 System type: ${systemType || 'software project'}
-${readme ? `README (excerpt):\n${readme.slice(0, 700)}` : ''}
+Total commits: ${(commits || []).length}
 
-Commit history (evidence):
+README:
+${readme ? readme.slice(0, 2500) : '(no README)'}
+
+Commit history — each entry is a real decision the candidate made (use these SHAs in questions):
 ${commitLines || '  (no commits available)'}`
   }
 
@@ -101,13 +104,13 @@ ${resumeText ? `Candidate background: ${String(resumeText).slice(0, 400)}` : ''}
 
 Generate exactly 5 examination questions. Non-negotiable rules:
 1. Every question must be unanswerable by someone who copy-pasted or never ran the code
-2. Reference specific evidence visible in the data above (commit message, tech choice, file structure)
+2. MANDATORY: At least 2 questions MUST quote a specific commit SHA (first 7 chars) and its message from the commit history above — if no commits are available, use README evidence instead
 3. Never ask "what is X" — ask WHY they chose it, HOW they debugged it, WHAT they gave up
 4. Q1: Warm-up — broad, "walk me through the hardest part of building this"
-5. Q2: Probe a specific technical decision (cite the evidence from commits or tech stack)
-6. Q3: Force a trade-off — no single right answer, they must defend a choice
-7. Q4: Failure or debugging story — what broke, how they found it, what they changed
-8. Q5: Pressure — the most technically risky or likely-exaggerated claim in this repo
+5. Q2: NAME a specific commit (e.g. "In commit abc1234 you wrote '...message...' — walk me through why you made that change and what problem it solved")
+6. Q3: Force a trade-off — no single right answer, they must defend a specific architectural choice from the tech stack
+7. Q4: NAME another specific commit — a change that looks risky, rushed, or surprising — ask what they were debugging or deciding at that moment
+8. Q5: Pressure — the most technically risky or likely-exaggerated claim in this repo; if they can't explain it in detail, it's likely borrowed
 
 Return ONLY a JSON array, no markdown, no explanation:
 [
