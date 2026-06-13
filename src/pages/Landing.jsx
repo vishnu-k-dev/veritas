@@ -110,6 +110,25 @@ const LANDING_CSS = `
 .land-root .btn-hero .arr { font-size: 20px; transition: transform 0.18s ease; line-height: 1; }
 .land-root .btn-hero:hover .arr { transform: translateX(5px); }
 
+/* demo video button — secondary CTA next to hero button */
+.land-root .btn-demo {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-ui); font-size: 15px; font-weight: 500;
+  letter-spacing: 0.01em; padding: 17px 28px;
+  border-radius: 2px; border: 1.5px solid var(--line-strong);
+  background: transparent; color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.16s, background 0.16s, transform 0.12s;
+  white-space: nowrap; text-decoration: none;
+}
+.land-root .btn-demo:hover {
+  border-color: var(--text);
+  background: rgba(28,25,18,0.05);
+  transform: translateY(-1px);
+}
+.land-root .btn-demo:active { transform: translateY(1px); }
+.land-root .btn-demo .play { font-size: 12px; color: var(--accent); }
+
 /* wrap */
 .land-root .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
 
@@ -443,7 +462,7 @@ export default function Landing({ onGetStarted }) {
 
                 {/* ── nav ── */}
                 <nav className="land-nav">
-                    <button className="wordmark" onClick={onGetStarted}>
+                    <button className="wordmark" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         VERIT<span className="a-mark">A</span>S
                     </button>
                     <div className="land-nav-links">
@@ -476,6 +495,14 @@ export default function Landing({ onGetStarted }) {
                                     <button className="btn-hero" onClick={() => window.location.href = '/exam'}>
                                         Start examination <span className="arr">→</span>
                                     </button>
+                                    <a
+                                        className="btn-demo"
+                                        href="https://www.youtube.com/watch?v=A99svPbIk_k"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <span className="play">▶</span> View Demo Video
+                                    </a>
                                 </div>
                             </div>
 
@@ -708,7 +735,7 @@ export default function Landing({ onGetStarted }) {
                 {/* ── footer ── */}
                 <footer className="land-foot">
                     <div className="wrap foot-row">
-                        <button className="wordmark" onClick={onGetStarted}>
+                        <button className="wordmark" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                             VERIT<span className="a-mark">A</span>S
                         </button>
                         <span className="foot-note">Built for Far Away 2026 · Reimagining examinations</span>

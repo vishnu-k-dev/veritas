@@ -312,4 +312,36 @@ Creates `repo_chunks` (RAG), `exam_reports` (certificates), and all indexes.
 
 ---
 
+---
+
+## Our Journey — June 7 to June 13, 2026
+
+Seven days from the theme drop to a live, deployed system.
+
+The core insight came on Day 1: a GitHub repository is already a complete record of every decision a developer made. Every commit is a timestamped choice. If the AI reads that, the exam writes itself — and only the person who was actually there can answer it.
+
+From there: built the GitHub ingestion pipeline, a deterministic repo analysis engine (zero LLM cost), and got the first commit-grounded question generated from a real repo. Then the exam UI state machine (`INTAKE → ANALYZING → BLUEPRINT → VIVA → CERTIFICATE`), the proctoring layer, the five-dimension scoring engine, the pgvector RAG pipeline, certificate persistence on Neon Postgres, and the full landing page.
+
+**Bugs we hit and fixed:**
+- VIVA stage showed blank screen — the questions array was passed before the API response resolved. Fixed with an explicit loading guard.
+- HNSW index creation failed silently when the `pgvector` extension wasn't enabled. Added `CREATE EXTENSION IF NOT EXISTS vector` to the migration.
+- Groq key retry was hitting the same failed key in a loop. Fixed with round-robin rotation across all four keys.
+- The most important one: VERITAS was only fetching 20 commits (`per_page=20` default) and only feeding 10 of them to the question LLM — so questions were coming entirely from the README, not the commit history. Fixed both: frontend now fetches up to 100, backend feeds up to 50 commits with dates and SHAs, and the prompt mandates that at least two questions name specific commit SHAs.
+
+---
+
+## If We Get to Round 2
+
+**Multi-document evidence** — Extend beyond GitHub repos to PDFs, research papers, and portfolio sites. Anything a candidate claims as their work should be examinable.
+
+**Institution examiner panel** — A dedicated interface for examiners: per-question evidence trails, the ability to add manual notes alongside AI scores, and bulk scheduling for a cohort.
+
+**Longitudinal tracking** — A candidate's VERITAS record across multiple submissions over time, so institutions see growth — not just a single snapshot.
+
+**Richer question types** — Beyond written viva: show a diff from the candidate's own repo and ask what it does and why; a debugging simulation where the candidate explains what they would check first.
+
+**Institutional API** — So universities and bootcamps can embed VERITAS into their existing LMS without replacing anything they already have.
+
+---
+
 *Far Away 2026 · Examinations — Reimagine the future of examinations with secure, fair and intelligent solutions · Solo submission*
