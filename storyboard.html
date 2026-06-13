@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>VERITAS — Video Storyboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: monospace; background: #1C1912; color: #F5F2E9; padding: 40px 24px; }
+h1 { font-family: Georgia, serif; font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.meta { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,242,233,0.4); margin-bottom: 40px; }
+.scene-wrap { margin-bottom: 48px; }
+.scene-label {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 10px;
+}
+.scene-label span { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,242,233,0.4); }
+.download-btn {
+  margin-left: auto;
+  background: rgba(245,242,233,0.08); border: 1px solid rgba(245,242,233,0.15);
+  color: #F5F2E9; padding: 5px 14px; border-radius: 3px;
+  font-family: monospace; font-size: 10px; letter-spacing: 1px;
+  cursor: pointer; text-decoration: none; display: inline-block;
+}
+.download-btn:hover { background: rgba(245,242,233,0.14); }
+svg { width: 100%; height: auto; display: block; border-radius: 4px; }
+@media print {
+  body { background: white; padding: 0; }
+  .download-btn { display: none; }
+  .scene-label span { color: #333; }
+  .scene-wrap { page-break-after: always; margin: 0; padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<h1>VERITAS — Video Storyboard</h1>
+<div class="meta">Far Away 2026 · 10 Scenes · Team vishnuk2006</div>
+
+<!-- TITLE CARD -->
+<div class="scene-wrap" id="s0">
+  <div class="scene-label">
+    <span>00 · Title Card</span>
+    <a class="download-btn" onclick="downloadSVG('s0','veritas-00-title')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#F5F2E9"/>
+    <rect x="0" y="0" width="800" height="5" fill="#8E2A1B"/>
+    <rect x="0" y="445" width="800" height="5" fill="#8E2A1B"/>
+    <rect x="60" y="4" width="1" height="442" fill="#E0DDD5"/>
+    <rect x="740" y="4" width="1" height="442" fill="#E0DDD5"/>
+    <text x="400" y="42" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="12" letter-spacing="4">FAR AWAY 2026 · EXAMINATION TRACK</text>
+    <text x="400" y="60" text-anchor="middle" fill="#524C3F" font-family="monospace" font-size="11" letter-spacing="2">Fair · Secure · Intelligent</text>
+    <rect x="80" y="72" width="640" height="1" fill="#D4CFC2"/>
+    <text x="400" y="168" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="96" font-weight="600" letter-spacing="-2">VERIT<tspan fill="#8E2A1B">A</tspan>S</text>
+    <text x="400" y="200" text-anchor="middle" fill="#524C3F" font-family="monospace" font-size="11" letter-spacing="3">THE EXAMINATION THAT KNOWS WHAT YOU BUILT</text>
+    <rect x="80" y="218" width="640" height="1" fill="#D4CFC2"/>
+    <text x="400" y="252" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="18">Vishnu K · Revanth M · Rishi S</text>
+    <text x="400" y="282" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="11" letter-spacing="3">TEAM NAME</text>
+    <text x="400" y="318" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="26" font-weight="700" letter-spacing="2">vishnuk2006</text>
+    <text x="400" y="350" text-anchor="middle" fill="#524C3F" font-family="monospace" font-size="12">Vishnu's personal Unstop username. Became the team name by accident.</text>
+    <text x="400" y="370" text-anchor="middle" fill="#524C3F" font-family="monospace" font-size="12">We noticed after submitting. The code is great though, we promise.</text>
+    <rect x="80" y="390" width="640" height="1" fill="#D4CFC2"/>
+    <text x="400" y="414" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="10" letter-spacing="1">veritas-examination.vercel.app · github.com/vishnu-k-dev/veritas</text>
+  </svg>
+</div>
+
+<!-- SCENE 1 -->
+<div class="scene-wrap" id="s1">
+  <div class="scene-label">
+    <span>01 · Not Fair</span>
+    <a class="download-btn" onclick="downloadSVG('s1','veritas-01-not-fair')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#FDFCF8"/>
+    <rect width="400" height="400" fill="#FDFCF8"/>
+    <rect x="400" width="400" height="400" fill="#F5F2E9"/>
+    <line x1="400" y1="0" x2="400" y2="390" stroke="#D4CFC2" stroke-width="1.5"/>
+    <!-- Arjun header -->
+    <text x="200" y="32" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700" letter-spacing="2">ARJUN SHARMA</text>
+    <text x="200" y="48" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="9">Built it. 8 months. 127 commits.</text>
+    <!-- Code editor -->
+    <rect x="48" y="58" width="288" height="172" rx="5" fill="#1C1912"/>
+    <rect x="48" y="58" width="288" height="22" rx="5" fill="#252220"/>
+    <circle cx="65" cy="69" r="4.5" fill="#E05D5D"/>
+    <circle cx="80" cy="69" r="4.5" fill="#E0B85D"/>
+    <circle cx="95" cy="69" r="4.5" fill="#5DE07A"/>
+    <text x="192" y="73" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="9">payment-service / src / queue.js</text>
+    <text x="64" y="96" fill="#8B7FD4" font-family="monospace" font-size="9">import</text>
+    <text x="102" y="96" fill="#C8C3B8" font-family="monospace" font-size="9">Bull from 'bull'</text>
+    <text x="64" y="110" fill="#C8C3B8" font-family="monospace" font-size="9" opacity="0.5">// switched from SQS — cost $240/mo</text>
+    <text x="64" y="124" fill="#5DB876" font-family="monospace" font-size="9">const</text>
+    <text x="100" y="124" fill="#C8C3B8" font-family="monospace" font-size="9">paymentQueue =</text>
+    <text x="64" y="138" fill="#E07070" font-family="monospace" font-size="9">  new</text>
+    <text x="92" y="138" fill="#C8C3B8" font-family="monospace" font-size="9">Bull('payments', {</text>
+    <text x="64" y="152" fill="#C8C3B8" font-family="monospace" font-size="9">  redis: process.env.REDIS_URL,</text>
+    <text x="64" y="166" fill="#C8C3B8" font-family="monospace" font-size="9">  defaultJobOptions: { attempts: 3 }</text>
+    <text x="64" y="180" fill="#C8C3B8" font-family="monospace" font-size="9">})</text>
+    <rect x="64" y="186" width="6" height="12" rx="1" fill="#8E2A1B" opacity="0.8"/>
+    <!-- Commit history -->
+    <text x="48" y="252" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">COMMIT HISTORY</text>
+    <line x1="48" y1="268" x2="330" y2="268" stroke="#D4CFC2" stroke-width="1.5"/>
+    <circle cx="68" cy="268" r="7" fill="#1E6B45"/><text x="68" y="286" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="8">init</text>
+    <circle cx="112" cy="268" r="7" fill="#1E6B45"/><text x="112" y="286" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="8">feat: auth</text>
+    <circle cx="156" cy="268" r="7" fill="#1E6B45"/><text x="156" y="286" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="8">fix: cache</text>
+    <circle cx="200" cy="268" r="7" fill="#1E6B45"/><text x="200" y="286" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="8">refactor</text>
+    <circle cx="244" cy="268" r="7" fill="#1E6B45"/><text x="244" y="286" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="8">a3f9c2b</text>
+    <circle cx="288" cy="268" r="7" fill="#8E2A1B"/><text x="288" y="286" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="8">today</text>
+    <text x="48" y="310" fill="#6B6459" font-family="monospace" font-size="9">127 commits · 8 months · 3 rewrites</text>
+    <!-- Riya header -->
+    <text x="600" y="32" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700" letter-spacing="2">RIYA MENON</text>
+    <text x="600" y="48" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="9">Cloned it. Renamed it. 1 commit.</text>
+    <!-- Prep book stack -->
+    <rect x="420" y="62" width="168" height="116" rx="4" fill="#fff" stroke="#E0DDD5" stroke-width="1.5" transform="rotate(-5,504,120)"/>
+    <rect x="424" y="60" width="168" height="116" rx="4" fill="#fff" stroke="#E0DDD5" stroke-width="1.5" transform="rotate(-2,508,118)"/>
+    <rect x="428" y="58" width="168" height="116" rx="4" fill="#FDFCF8" stroke="#D4CFC2" stroke-width="1.5"/>
+    <text x="512" y="88" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="10" letter-spacing="1" font-weight="700">TOP 50 INTERVIEW</text>
+    <text x="512" y="102" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="10" letter-spacing="1" font-weight="700">QUESTIONS 2024</text>
+    <rect x="448" y="112" width="128" height="1.5" rx="1" fill="#E8E5DE"/>
+    <text x="450" y="126" fill="#8B8472" font-size="9">Q: Explain TCP vs UDP...</text>
+    <text x="450" y="140" fill="#8B8472" font-size="9">A: TCP is connection-oriented...</text>
+    <text x="450" y="154" fill="#9B9589" font-size="9">memorise this exact phrasing ✓</text>
+    <!-- YouTube card -->
+    <rect x="612" y="58" width="148" height="92" rx="4" fill="#111"/>
+    <text x="686" y="114" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="38">▶</text>
+    <text x="686" y="144" text-anchor="middle" fill="#8B8472" font-size="9">System Design Crash Course</text>
+    <!-- ChatGPT card -->
+    <rect x="420" y="188" width="330" height="84" rx="4" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <circle cx="446" cy="207" r="13" fill="#10A37F" opacity="0.2"/>
+    <text x="446" y="211" text-anchor="middle" fill="#10A37F" font-size="11" font-weight="700">AI</text>
+    <text x="468" y="204" fill="#6B6459" font-size="9">Explain Redis caching in 3 bullet points:</text>
+    <text x="468" y="222" fill="#9B9589" font-size="9">• Redis is an in-memory data structure store...</text>
+    <text x="468" y="236" fill="#9B9589" font-size="9">• It supports data persistence via RDB/AOF...</text>
+    <text x="468" y="250" fill="#9B9589" font-size="9">• Commonly used for session caching and...</text>
+    <!-- Divider -->
+    <rect x="0" y="322" width="800" height="1.5" fill="#E0DDD5"/>
+    <!-- Score boxes -->
+    <rect x="48" y="336" width="286" height="52" rx="4" fill="#FDE8E4" stroke="#8E2A1B" stroke-width="1"/>
+    <text x="191" y="358" text-anchor="middle" fill="#8E2A1B" font-size="10" font-family="monospace" letter-spacing="1">TRADITIONAL EXAM SCORE</text>
+    <text x="191" y="378" text-anchor="middle" fill="#8E2A1B" font-family="Georgia,serif" font-size="24" font-weight="700">71 / 100</text>
+    <rect x="466" y="336" width="286" height="52" rx="4" fill="#FDE8E4" stroke="#8E2A1B" stroke-width="1"/>
+    <text x="609" y="358" text-anchor="middle" fill="#8E2A1B" font-size="10" font-family="monospace" letter-spacing="1">TRADITIONAL EXAM SCORE</text>
+    <text x="609" y="378" text-anchor="middle" fill="#8E2A1B" font-family="Georgia,serif" font-size="24" font-weight="700">73 / 100</text>
+    <!-- Footer -->
+    <rect x="0" y="400" width="800" height="50" fill="#8E2A1B"/>
+    <text x="400" y="432" text-anchor="middle" fill="#fff" font-family="monospace" font-size="18" letter-spacing="12" font-weight="700">NOT FAIR</text>
+  </svg>
+</div>
+
+<!-- SCENE 2 -->
+<div class="scene-wrap" id="s2">
+  <div class="scene-label">
+    <span>02 · Not Secure</span>
+    <a class="download-btn" onclick="downloadSVG('s2','veritas-02-not-secure')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#F5F2E9"/>
+    <!-- Browser window -->
+    <rect x="60" y="24" width="460" height="330" rx="6" fill="#fff" stroke="#D4CFC2" stroke-width="1.5"/>
+    <rect x="60" y="24" width="460" height="34" rx="6" fill="#F0EDE6"/>
+    <rect x="60" y="50" width="460" height="8" fill="#F0EDE6"/>
+    <circle cx="82" cy="41" r="5" fill="#E05D5D"/>
+    <circle cx="98" cy="41" r="5" fill="#E0B85D"/>
+    <circle cx="114" cy="41" r="5" fill="#5DE07A"/>
+    <rect x="134" y="34" width="240" height="14" rx="7" fill="#E8E5DE"/>
+    <text x="254" y="44" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9">examportal.io/assessment/SE-2024</text>
+    <rect x="390" y="34" width="118" height="14" rx="7" fill="#FDE8E4"/>
+    <text x="449" y="44" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="8" font-weight="700">TAB SWITCH DETECTED</text>
+    <text x="82" y="78" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">STANDARD SOFTWARE ENGINEERING ASSESSMENT</text>
+    <rect x="78" y="84" width="420" height="1" fill="#E8E5DE"/>
+    <text x="82" y="104" fill="#8B8472" font-family="monospace" font-size="9">Q1.</text>
+    <text x="102" y="104" fill="#1C1912" font-size="11" font-weight="500">Explain the difference between TCP and UDP.</text>
+    <rect x="82" y="112" width="412" height="28" rx="3" fill="#F7F6F2" stroke="#E0DDD5" stroke-width="1"/>
+    <text x="90" y="124" fill="#8B8472" font-size="9">TCP is connection-oriented and provides reliable delivery. UDP is</text>
+    <text x="90" y="136" fill="#8B8472" font-size="9">connectionless and faster but unreliable.</text>
+    <text x="82" y="162" fill="#8B8472" font-family="monospace" font-size="9">Q2.</text>
+    <text x="102" y="162" fill="#1C1912" font-size="11" font-weight="500">What is the time complexity of quicksort?</text>
+    <rect x="82" y="170" width="412" height="28" rx="3" fill="#F7F6F2" stroke="#E0DDD5" stroke-width="1"/>
+    <text x="90" y="182" fill="#8B8472" font-size="9">Average case O(n log n), worst case O(n²). Best practice is</text>
+    <text x="90" y="194" fill="#8B8472" font-size="9">randomised pivot selection.</text>
+    <text x="82" y="220" fill="#8B8472" font-family="monospace" font-size="9">Q3.</text>
+    <text x="102" y="220" fill="#1C1912" font-size="11" font-weight="500">Describe a challenging technical problem you solved.</text>
+    <rect x="82" y="228" width="412" height="70" rx="3" fill="#F7F6F2" stroke="#E0DDD5" stroke-width="1"/>
+    <rect x="86" y="232" width="126" height="14" rx="2" fill="#E8F5EC"/>
+    <text x="90" y="242" fill="#1E6B45" font-family="monospace" font-size="8" font-weight="700">⚡ AI-ASSISTED RESPONSE</text>
+    <text x="90" y="258" fill="#8B8472" font-size="9">In my experience, I faced a challenging problem with database</text>
+    <text x="90" y="270" fill="#8B8472" font-size="9">performance optimisation. I leveraged best practices to implement</text>
+    <text x="90" y="282" fill="#8B8472" font-size="9">caching solutions and achieved significant improvements.</text>
+    <rect x="388" y="312" width="120" height="30" rx="4" fill="#1C1912"/>
+    <text x="448" y="331" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Submit Exam</text>
+    <!-- ChatGPT panel -->
+    <rect x="540" y="24" width="220" height="158" rx="6" fill="#fff" stroke="#D4CFC2" stroke-width="1.5"/>
+    <rect x="540" y="24" width="220" height="28" rx="6" fill="#E8F5EC"/>
+    <rect x="540" y="44" width="220" height="8" fill="#E8F5EC"/>
+    <circle cx="558" cy="38" r="9" fill="#10A37F" opacity="0.3"/>
+    <text x="558" y="42" text-anchor="middle" fill="#10A37F" font-size="10" font-weight="700">AI</text>
+    <text x="575" y="36" fill="#1C1912" font-size="10" font-weight="600">ChatGPT</text>
+    <text x="575" y="49" fill="#6B6459" font-size="9">gpt-4o · Active session</text>
+    <text x="556" y="72" fill="#6B6459" font-size="9">Answer Q3 for a software</text>
+    <text x="556" y="85" fill="#6B6459" font-size="9">engineering interview...</text>
+    <text x="556" y="120" fill="#1E6B45" font-size="9" font-weight="500">Here's a polished response:</text>
+    <text x="556" y="133" fill="#1E6B45" font-size="9">"In my experience..."</text>
+    <!-- Copy-paste visual -->
+    <rect x="540" y="208" width="220" height="100" rx="4" fill="#FDFCF8" stroke="#D4CFC2" stroke-width="1"/>
+    <text x="650" y="232" text-anchor="middle" fill="#8B8472" font-size="9">In my experience, I faced a</text>
+    <text x="650" y="246" text-anchor="middle" fill="#8B8472" font-size="9">challenging problem with database</text>
+    <text x="650" y="260" text-anchor="middle" fill="#8B8472" font-size="9">performance optimisation...</text>
+    <rect x="540" y="322" width="220" height="28" rx="3" fill="#FDE8E4"/>
+    <text x="650" y="340" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="9" font-weight="700">98.3% SIMILARITY SCORE</text>
+    <!-- Footer -->
+    <rect x="0" y="400" width="800" height="50" fill="#8E2A1B"/>
+    <text x="400" y="432" text-anchor="middle" fill="#fff" font-family="monospace" font-size="18" letter-spacing="10" font-weight="700">NOT SECURE</text>
+  </svg>
+</div>
+
+<!-- SCENE 3 -->
+<div class="scene-wrap" id="s3">
+  <div class="scene-label">
+    <span>03 · Not Intelligent</span>
+    <a class="download-btn" onclick="downloadSVG('s3','veritas-03-not-intelligent')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#F5F2E9"/>
+    <text x="400" y="32" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="10" letter-spacing="2">247 CANDIDATES · 5 DISCIPLINES · 1 IDENTICAL EXAM</text>
+    <!-- 5 candidate cards -->
+    <rect x="24" y="50" width="142" height="138" rx="5" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <rect x="24" y="50" width="142" height="40" rx="5" fill="#EEE9FA"/>
+    <rect x="24" y="82" width="142" height="8" fill="#EEE9FA"/>
+    <circle cx="95" cy="70" r="16" fill="#D4CFEA"/>
+    <text x="95" y="106" text-anchor="middle" fill="#6B6459" font-size="10" font-weight="600">Frontend Eng</text>
+    <text x="95" y="120" text-anchor="middle" fill="#8B8472" font-size="9">React · TypeScript</text>
+    <text x="95" y="168" text-anchor="middle" fill="#6B6459" font-size="9">portfolio-site · 34 repos</text>
+
+    <rect x="178" y="50" width="142" height="138" rx="5" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <rect x="178" y="50" width="142" height="40" rx="5" fill="#E8F5EC"/>
+    <rect x="178" y="82" width="142" height="8" fill="#E8F5EC"/>
+    <circle cx="249" cy="70" r="16" fill="#BDD9C9"/>
+    <text x="249" y="106" text-anchor="middle" fill="#6B6459" font-size="10" font-weight="600">Backend Eng</text>
+    <text x="249" y="120" text-anchor="middle" fill="#8B8472" font-size="9">Go · PostgreSQL</text>
+    <text x="249" y="168" text-anchor="middle" fill="#6B6459" font-size="9">payment-service · 89 repos</text>
+
+    <rect x="332" y="50" width="142" height="138" rx="5" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <rect x="332" y="50" width="142" height="40" rx="5" fill="#FDE8E4"/>
+    <rect x="332" y="82" width="142" height="8" fill="#FDE8E4"/>
+    <circle cx="403" cy="70" r="16" fill="#DFC0BB"/>
+    <text x="403" y="106" text-anchor="middle" fill="#6B6459" font-size="10" font-weight="600">ML Engineer</text>
+    <text x="403" y="120" text-anchor="middle" fill="#8B8472" font-size="9">PyTorch · CUDA</text>
+    <text x="403" y="168" text-anchor="middle" fill="#6B6459" font-size="9">llm-finetune · 51 repos</text>
+
+    <rect x="486" y="50" width="142" height="138" rx="5" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <rect x="486" y="50" width="142" height="40" rx="5" fill="#F0EDE6"/>
+    <rect x="486" y="82" width="142" height="8" fill="#F0EDE6"/>
+    <circle cx="557" cy="70" r="16" fill="#D4CFC2"/>
+    <text x="557" y="106" text-anchor="middle" fill="#6B6459" font-size="10" font-weight="600">Mobile Eng</text>
+    <text x="557" y="120" text-anchor="middle" fill="#8B8472" font-size="9">Swift · Kotlin</text>
+    <text x="557" y="168" text-anchor="middle" fill="#6B6459" font-size="9">fitness-tracker · 27 repos</text>
+
+    <rect x="640" y="50" width="142" height="138" rx="5" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <rect x="640" y="50" width="142" height="40" rx="5" fill="#E8EFF8"/>
+    <rect x="640" y="82" width="142" height="8" fill="#E8EFF8"/>
+    <circle cx="711" cy="70" r="16" fill="#BEC9D9"/>
+    <text x="711" y="106" text-anchor="middle" fill="#6B6459" font-size="10" font-weight="600">DevOps Eng</text>
+    <text x="711" y="120" text-anchor="middle" fill="#8B8472" font-size="9">Kubernetes · AWS</text>
+    <text x="711" y="168" text-anchor="middle" fill="#6B6459" font-size="9">infra-terraform · 62 repos</text>
+
+    <!-- Converging lines -->
+    <line x1="95" y1="188" x2="360" y2="242" stroke="#D4CFC2" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="249" y1="188" x2="372" y2="242" stroke="#D4CFC2" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="403" y1="188" x2="400" y2="242" stroke="#D4CFC2" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="557" y1="188" x2="430" y2="242" stroke="#D4CFC2" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="711" y1="188" x2="444" y2="242" stroke="#D4CFC2" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+    <!-- Assessment box -->
+    <rect x="214" y="244" width="372" height="144" rx="5" fill="#fff" stroke="#8E2A1B" stroke-width="2"/>
+    <rect x="214" y="244" width="372" height="28" rx="5" fill="#FDE8E4"/>
+    <rect x="214" y="264" width="372" height="8" fill="#FDE8E4"/>
+    <text x="400" y="260" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="10" letter-spacing="2" font-weight="700">STANDARD ASSESSMENT · ALL ROLES · ALL DISCIPLINES</text>
+    <text x="232" y="288" fill="#6B6459" font-size="10">Q1.  Explain the difference between TCP and UDP.</text>
+    <rect x="232" y="294" width="332" height="1" fill="#F0EDE6"/>
+    <text x="232" y="310" fill="#6B6459" font-size="10">Q2.  What is the time complexity of quicksort?</text>
+    <rect x="232" y="316" width="332" height="1" fill="#F0EDE6"/>
+    <text x="232" y="332" fill="#6B6459" font-size="10">Q3.  Describe a system you designed from scratch.</text>
+    <rect x="232" y="338" width="332" height="1" fill="#F0EDE6"/>
+    <text x="400" y="374" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="9" letter-spacing="1">IGNORES YOUR ACTUAL REPOSITORIES · DECISIONS · EXPERIENCE</text>
+
+    <!-- Footer -->
+    <rect x="0" y="400" width="800" height="50" fill="#8E2A1B"/>
+    <text x="400" y="432" text-anchor="middle" fill="#fff" font-family="monospace" font-size="16" letter-spacing="8" font-weight="700">NOT INTELLIGENT</text>
+  </svg>
+</div>
+
+<!-- SCENE 4 -->
+<div class="scene-wrap" id="s4">
+  <div class="scene-label">
+    <span>04 · The Idea</span>
+    <a class="download-btn" onclick="downloadSVG('s4','veritas-04-the-idea')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#FDFCF8"/>
+    <text x="400" y="148" text-anchor="middle" fill="#C8C3B8" font-family="Georgia,serif" font-size="30" font-style="italic" letter-spacing="-0.5">What if the exam</text>
+    <text x="400" y="196" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="38" font-weight="600" letter-spacing="-1">knew what you built?</text>
+    <rect x="300" y="216" width="200" height="1.5" rx="1" fill="#E0DDD5"/>
+    <rect x="172" y="238" width="456" height="50" rx="8" fill="#F5F2E9" stroke="#D4CFC2" stroke-width="1.5"/>
+    <text x="232" y="260" fill="#8B8472" font-family="monospace" font-size="12">github.com /</text>
+    <text x="316" y="260" fill="#6B6459" font-family="monospace" font-size="12">arjun-sharma /</text>
+    <text x="424" y="260" fill="#1C1912" font-family="monospace" font-size="12" font-weight="700">payment-service</text>
+    <rect x="572" y="248" width="2" height="18" rx="1" fill="#8E2A1B" opacity="0.9"/>
+    <circle cx="610" cy="263" r="15" fill="#1C1912"/>
+    <text x="610" y="268" text-anchor="middle" fill="#fff" font-size="16">→</text>
+    <text x="400" y="320" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="10" letter-spacing="2">ANY PUBLIC GITHUB REPOSITORY</text>
+    <circle cx="388" cy="350" r="4" fill="#E0DDD5"/>
+    <circle cx="400" cy="350" r="4" fill="#C8C3B8"/>
+    <circle cx="412" cy="350" r="5" fill="#8E2A1B"/>
+    <text x="400" y="418" text-anchor="middle" fill="#D4CFC2" font-family="monospace" font-size="13" letter-spacing="8">VERITAS</text>
+  </svg>
+</div>
+
+<!-- SCENE 5 -->
+<div class="scene-wrap" id="s5">
+  <div class="scene-label">
+    <span>05 · Repository Analysis</span>
+    <a class="download-btn" onclick="downloadSVG('s5','veritas-05-analysis')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#F5F2E9"/>
+
+    <!-- Left: Analysis Pipeline card -->
+    <rect x="28" y="28" width="246" height="336" rx="5" fill="#FDFCF8" stroke="#D4CFC2" stroke-width="1.5"/>
+    <rect x="28" y="28" width="246" height="36" rx="5" fill="#F0EDE6"/>
+    <rect x="28" y="56" width="246" height="8" fill="#F0EDE6"/>
+    <text x="44" y="50" fill="#6B6459" font-family="monospace" font-size="10" letter-spacing="2" font-weight="700">REPOSITORY ANALYSIS</text>
+
+    <circle cx="52" cy="84" r="6" fill="#1E6B45"/>
+    <text x="66" y="80" fill="#1C1912" font-family="monospace" font-size="10" font-weight="600">Reading commit history</text>
+    <text x="66" y="94" fill="#1E6B45" font-family="monospace" font-size="9">127 commits · 8 months</text>
+
+    <line x1="52" y1="98" x2="52" y2="118" stroke="#D4CFC2" stroke-width="1" stroke-dasharray="2,2"/>
+    <circle cx="52" cy="128" r="6" fill="#1E6B45"/>
+    <text x="66" y="124" fill="#1C1912" font-family="monospace" font-size="10" font-weight="600">Understanding architecture</text>
+    <text x="66" y="138" fill="#1E6B45" font-family="monospace" font-size="9">Node.js · Redis · PostgreSQL</text>
+
+    <line x1="52" y1="142" x2="52" y2="162" stroke="#D4CFC2" stroke-width="1" stroke-dasharray="2,2"/>
+    <circle cx="52" cy="172" r="6" fill="#1E6B45"/>
+    <text x="66" y="168" fill="#1C1912" font-family="monospace" font-size="10" font-weight="600">Mapping dependencies</text>
+    <text x="66" y="182" fill="#1E6B45" font-family="monospace" font-size="9">14 key decisions identified</text>
+
+    <line x1="52" y1="186" x2="52" y2="206" stroke="#D4CFC2" stroke-width="1" stroke-dasharray="2,2"/>
+    <circle cx="52" cy="216" r="6" fill="#4F4380"/>
+    <text x="66" y="212" fill="#1C1912" font-family="monospace" font-size="10" font-weight="600">Building vector index</text>
+    <text x="66" y="226" fill="#4F4380" font-family="monospace" font-size="9">Cohere · 42 chunks · HNSW</text>
+
+    <line x1="52" y1="230" x2="52" y2="250" stroke="#D4CFC2" stroke-width="1" stroke-dasharray="2,2"/>
+    <circle cx="52" cy="260" r="6" fill="#8E2A1B"/>
+    <text x="66" y="256" fill="#1C1912" font-family="monospace" font-size="10" font-weight="600">Generating questions</text>
+    <text x="66" y="270" fill="#8E2A1B" font-family="monospace" font-size="9">Personalising to your work...</text>
+
+    <rect x="44" y="298" width="214" height="52" rx="4" fill="#FDE8E4" stroke="#8E2A1B" stroke-width="1"/>
+    <text x="52" y="316" fill="#8E2A1B" font-family="monospace" font-size="9" font-weight="700">KEY DECISION DETECTED</text>
+    <text x="52" y="330" fill="#8E2A1B" font-family="monospace" font-size="9">commit a3f9c2b</text>
+    <text x="52" y="344" fill="#6B6459" font-size="9">Removed Redux → useContext + useReducer</text>
+
+    <!-- Right: Architecture graph (light) -->
+    <rect x="292" y="28" width="480" height="336" rx="5" fill="#FDFCF8" stroke="#D4CFC2" stroke-width="1.5"/>
+
+    <!-- Graph edges -->
+    <line x1="520" y1="196" x2="404" y2="120" stroke="#D4CFC2" stroke-width="1.5"/>
+    <line x1="520" y1="196" x2="368" y2="196" stroke="#D4CFC2" stroke-width="1.5"/>
+    <line x1="520" y1="196" x2="416" y2="290" stroke="#D4CFC2" stroke-width="1.5"/>
+    <line x1="520" y1="196" x2="634" y2="120" stroke="#D4CFC2" stroke-width="1.5"/>
+    <line x1="520" y1="196" x2="672" y2="196" stroke="#D4CFC2" stroke-width="1.5"/>
+    <line x1="520" y1="196" x2="634" y2="290" stroke="#D4CFC2" stroke-width="1.5"/>
+    <line x1="520" y1="196" x2="520" y2="88" stroke="#D4CFC2" stroke-width="1.5"/>
+    <line x1="520" y1="196" x2="520" y2="310" stroke="#D4CFC2" stroke-width="1.5"/>
+
+    <!-- Center node -->
+    <circle cx="520" cy="196" r="34" fill="#1C1912"/>
+    <text x="520" y="192" text-anchor="middle" fill="#F5F2E9" font-family="monospace" font-size="9" font-weight="600">payment</text>
+    <text x="520" y="205" text-anchor="middle" fill="#F5F2E9" font-family="monospace" font-size="9" font-weight="600">service</text>
+
+    <!-- Satellite nodes -->
+    <circle cx="404" cy="120" r="26" fill="#4F4380"/>
+    <text x="404" y="124" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">AUTH</text>
+
+    <circle cx="368" cy="196" r="26" fill="#4F4380"/>
+    <text x="368" y="200" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">CACHE</text>
+
+    <circle cx="416" cy="290" r="26" fill="#4F4380"/>
+    <text x="416" y="294" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">QUEUE</text>
+
+    <circle cx="634" cy="120" r="26" fill="#1E6B45"/>
+    <text x="634" y="124" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">API</text>
+
+    <circle cx="672" cy="196" r="26" fill="#1E6B45"/>
+    <text x="672" y="200" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">DB</text>
+
+    <circle cx="634" cy="290" r="26" fill="#1E6B45"/>
+    <text x="634" y="294" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">TESTS</text>
+
+    <circle cx="520" cy="88" r="26" fill="#8E2A1B"/>
+    <text x="520" y="92" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">DEPLOY</text>
+
+    <circle cx="520" cy="310" r="26" fill="#8E2A1B"/>
+    <text x="520" y="314" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10" font-weight="600">EVENTS</text>
+
+    <text x="520" y="354" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9">Architecture map — built deterministically, zero LLM cost</text>
+
+    <!-- Footer -->
+    <rect x="0" y="375" width="800" height="75" fill="#F0EDE6"/>
+    <rect x="0" y="374" width="800" height="2" fill="#D4CFC2"/>
+    <text x="400" y="398" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="10" letter-spacing="2" font-weight="700">ZERO AI COST FOR ANALYSIS</text>
+    <text x="400" y="420" text-anchor="middle" fill="#6B6459" font-size="11">Deterministic rule-based parsing — fully reproducible, zero hallucination risk</text>
+    <text x="400" y="438" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9">The LLM receives a clean structured object. It never reads raw code.</text>
+  </svg>
+</div>
+
+<!-- SCENE 6 -->
+<div class="scene-wrap" id="s6">
+  <div class="scene-label">
+    <span>06 · Fair — The Exam</span>
+    <a class="download-btn" onclick="downloadSVG('s6','veritas-06-fair')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#F5F2E9"/>
+    <rect x="36" y="22" width="728" height="396" rx="7" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <rect x="36" y="22" width="728" height="34" rx="7" fill="#F7F6F2"/>
+    <rect x="36" y="48" width="728" height="8" fill="#F7F6F2"/>
+    <circle cx="58" cy="39" r="5" fill="#E05D5D"/>
+    <circle cx="74" cy="39" r="5" fill="#E0B85D"/>
+    <circle cx="90" cy="39" r="5" fill="#5DE07A"/>
+    <text x="68" y="82" fill="#1C1912" font-family="monospace" font-size="12" font-weight="700" letter-spacing="1">VERITAS</text>
+    <text x="400" y="76" text-anchor="middle" fill="#6B6459" font-size="10">Arjun Sharma · payment-service</text>
+    <text x="400" y="90" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">PROCTORED EXAMINATION · QUESTION 2 OF 5</text>
+    <!-- Progress dots -->
+    <circle cx="656" cy="78" r="5" fill="#1E6B45"/>
+    <circle cx="672" cy="78" r="5" fill="#1E6B45"/>
+    <circle cx="688" cy="78" r="5" fill="#D4CFC2"/>
+    <circle cx="704" cy="78" r="5" fill="#D4CFC2"/>
+    <circle cx="720" cy="78" r="5" fill="#D4CFC2"/>
+    <!-- Proctoring status bar -->
+    <rect x="36" y="100" width="728" height="30" fill="#F7F6F2"/>
+    <rect x="36" y="129" width="728" height="1" fill="#E8E5DE"/>
+    <circle cx="62" cy="115" r="4" fill="#1E6B45"/>
+    <text x="73" y="119" fill="#6B6459" font-size="9" font-weight="500">Paste blocked</text>
+    <circle cx="158" cy="115" r="4" fill="#1E6B45"/>
+    <text x="169" y="119" fill="#6B6459" font-size="9" font-weight="500">Focus active</text>
+    <circle cx="246" cy="115" r="4" fill="#1E6B45"/>
+    <text x="257" y="119" fill="#6B6459" font-size="9" font-weight="500">0 tab switches</text>
+    <circle cx="348" cy="115" r="4" fill="#1E6B45"/>
+    <text x="359" y="119" fill="#6B6459" font-size="9" font-weight="500">AI patterns: none detected</text>
+    <text x="752" y="119" text-anchor="end" fill="#8B8472" font-family="monospace" font-size="9">18:42 remaining</text>
+    <!-- Question card -->
+    <rect x="62" y="142" width="676" height="124" rx="5" fill="#FDFCF8" stroke="#E0DDD5" stroke-width="1"/>
+    <rect x="62" y="142" width="4" height="124" rx="2" fill="#8E2A1B"/>
+    <rect x="80" y="154" width="186" height="20" rx="3" fill="#FDE8E4"/>
+    <text x="90" y="167" fill="#8E2A1B" font-family="monospace" font-size="9" font-weight="600">⌥ commit a3f9c2b · 14 Mar 2024</text>
+    <text x="80" y="200" fill="#1C1912" font-family="Georgia,serif" font-size="18" font-weight="600" letter-spacing="-0.3">In commit a3f9c2b you switched from Redux to</text>
+    <text x="80" y="222" fill="#1C1912" font-family="Georgia,serif" font-size="18" font-weight="600" letter-spacing="-0.3">useContext + useReducer. What drove that call?</text>
+    <text x="80" y="248" fill="#8B8472" font-size="9" font-family="monospace">Evidence: src/store/ removed · components/App.jsx refactored · bundle size −42kb</text>
+    <!-- Answer field -->
+    <rect x="62" y="276" width="676" height="114" rx="5" fill="#F7F6F2" stroke="#D4CFC2" stroke-width="1.5"/>
+    <text x="80" y="298" fill="#1C1912" font-size="11">The component tree was only 3 levels deep — Auth → Dashboard → Cards. Redux was</text>
+    <text x="80" y="314" fill="#1C1912" font-size="11">generating 400 lines of boilerplate for something a simple context could handle in 40.</text>
+    <text x="80" y="330" fill="#1C1912" font-size="11">I profiled it in Chrome DevTools — dispatch calls were adding ~12ms per interaction.</text>
+    <text x="80" y="346" fill="#1C1912" font-size="11">Switched in a3f9c2b, bundle dropped 42kb, re-render count fell from 23 to 6.</text>
+    <rect x="80" y="370" width="2" height="14" rx="1" fill="#8E2A1B" opacity="0.9"/>
+    <rect x="572" y="398" width="160" height="36" rx="5" fill="#1C1912"/>
+    <text x="652" y="421" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Submit Answer →</text>
+    <!-- Footer -->
+    <rect x="0" y="400" width="800" height="50" fill="#1E6B45"/>
+    <text x="400" y="432" text-anchor="middle" fill="#fff" font-family="monospace" font-size="18" letter-spacing="16" font-weight="700">FAIR</text>
+  </svg>
+</div>
+
+<!-- SCENE 7 -->
+<div class="scene-wrap" id="s7">
+  <div class="scene-label">
+    <span>07 · Secure — Integrity</span>
+    <a class="download-btn" onclick="downloadSVG('s7','veritas-07-secure')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#FDFCF8"/>
+    <!-- Left: blurred exam -->
+    <rect x="32" y="36" width="306" height="388" rx="5" fill="#F5F2E9" stroke="#E8E5DE" stroke-width="1"/>
+    <text x="185" y="70" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">EXAMINATION IN PROGRESS</text>
+    <rect x="52" y="82" width="264" height="4" rx="2" fill="#D4CFC2" opacity="0.6"/>
+    <rect x="52" y="92" width="196" height="4" rx="2" fill="#D4CFC2" opacity="0.5"/>
+    <rect x="52" y="116" width="264" height="82" rx="4" fill="#E0DDD5" opacity="0.5"/>
+    <text x="184" y="162" text-anchor="middle" fill="#9B9589" font-size="9">Question text hidden</text>
+    <rect x="52" y="208" width="264" height="120" rx="4" fill="#E0DDD5" opacity="0.4"/>
+    <text x="184" y="274" text-anchor="middle" fill="#9B9589" font-size="9">Answer field in use</text>
+
+    <!-- Arrow -->
+    <line x1="340" y1="225" x2="374" y2="225" stroke="#D4CFC2" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <polygon points="374,219 383,225 374,231" fill="#D4CFC2"/>
+
+    <!-- Right: Integrity panel -->
+    <rect x="383" y="36" width="380" height="388" rx="7" fill="#fff" stroke="#E0DDD5" stroke-width="1.5"/>
+    <rect x="383" y="36" width="380" height="54" rx="7" fill="#F7F6F2"/>
+    <rect x="383" y="82" width="380" height="8" fill="#F7F6F2"/>
+    <text x="573" y="62" text-anchor="middle" fill="#1C1912" font-size="13" font-weight="600">Session Integrity</text>
+    <text x="573" y="80" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">ARJUN SHARMA · LIVE MONITORING</text>
+
+    <!-- Signal rows -->
+    <rect x="403" y="100" width="340" height="46" rx="4" fill="#F7FCF9"/>
+    <circle cx="424" cy="123" r="6" fill="#1E6B45"/>
+    <text x="442" y="118" fill="#1C1912" font-size="11" font-weight="600">Paste Protection</text>
+    <text x="442" y="134" fill="#8B8472" font-size="9">Clipboard events intercepted — 3 attempts blocked</text>
+    <text x="733" y="126" text-anchor="end" fill="#1E6B45" font-family="monospace" font-size="10" font-weight="700">ACTIVE</text>
+
+    <rect x="403" y="154" width="340" height="46" rx="4" fill="#F7FCF9"/>
+    <circle cx="424" cy="177" r="6" fill="#1E6B45"/>
+    <text x="442" y="172" fill="#1C1912" font-size="11" font-weight="600">Tab Switching</text>
+    <text x="442" y="188" fill="#8B8472" font-size="9">Window focus monitored throughout session</text>
+    <rect x="692" y="168" width="36" height="18" rx="3" fill="#E8F5EC"/>
+    <text x="710" y="181" text-anchor="middle" fill="#1E6B45" font-family="monospace" font-size="10" font-weight="700">0</text>
+
+    <rect x="403" y="208" width="340" height="46" rx="4" fill="#F7FCF9"/>
+    <circle cx="424" cy="231" r="6" fill="#1E6B45"/>
+    <text x="442" y="226" fill="#1C1912" font-size="11" font-weight="600">Typing Velocity</text>
+    <text x="442" y="242" fill="#8B8472" font-size="9">Measured per answer — consistent, human-paced</text>
+    <text x="733" y="234" text-anchor="end" fill="#1E6B45" font-family="monospace" font-size="10" font-weight="700">78 WPM</text>
+
+    <rect x="403" y="262" width="340" height="46" rx="4" fill="#F7FCF9"/>
+    <circle cx="424" cy="285" r="6" fill="#1E6B45"/>
+    <text x="442" y="280" fill="#1C1912" font-size="11" font-weight="600">Right-Click Disabled</text>
+    <text x="442" y="296" fill="#8B8472" font-size="9">Context menu suppressed on all question elements</text>
+    <text x="733" y="288" text-anchor="end" fill="#1E6B45" font-family="monospace" font-size="10" font-weight="700">ACTIVE</text>
+
+    <rect x="403" y="316" width="340" height="60" rx="4" fill="#F7FCF9"/>
+    <circle cx="424" cy="346" r="6" fill="#1E6B45"/>
+    <text x="442" y="336" fill="#1C1912" font-size="11" font-weight="600">AI Pattern Detection</text>
+    <text x="442" y="352" fill="#8B8472" font-size="9">Heuristic analysis: opener phrases, filler language,</text>
+    <text x="442" y="366" fill="#8B8472" font-size="9">bullet density, first-person ratio — all within range</text>
+    <rect x="672" y="336" width="56" height="22" rx="3" fill="#E8F5EC"/>
+    <text x="700" y="351" text-anchor="middle" fill="#1E6B45" font-family="monospace" font-size="10" font-weight="700">CLEAN</text>
+
+    <text x="573" y="406" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9">No browser extensions. All 7 signals implemented with standard Web APIs.</text>
+
+    <!-- Footer -->
+    <rect x="0" y="400" width="800" height="50" fill="#1E6B45"/>
+    <text x="400" y="432" text-anchor="middle" fill="#fff" font-family="monospace" font-size="18" letter-spacing="14" font-weight="700">SECURE</text>
+  </svg>
+</div>
+
+<!-- SCENE 8 -->
+<div class="scene-wrap" id="s8">
+  <div class="scene-label">
+    <span>08 · Certificate</span>
+    <a class="download-btn" onclick="downloadSVG('s8','veritas-08-certificate')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#1C1912"/>
+    <circle cx="400" cy="225" r="380" fill="none" stroke="rgba(247,246,242,0.04)" stroke-width="60"/>
+    <!-- Certificate card -->
+    <rect x="108" y="26" width="584" height="372" rx="6" fill="#FDFCF8"/>
+    <rect x="108" y="26" width="584" height="50" rx="6" fill="#F5F2E9"/>
+    <rect x="108" y="68" width="584" height="8" fill="#F5F2E9"/>
+    <text x="400" y="55" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="14" letter-spacing="6" font-weight="700">VERITAS</text>
+    <text x="400" y="70" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="8" letter-spacing="2">EXAMINATION AUTHORITY · 2026</text>
+    <rect x="148" y="82" width="504" height="1" fill="#E0DDD5"/>
+    <text x="400" y="104" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="3">CERTIFICATE OF EXAMINATION</text>
+    <text x="400" y="148" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="30" font-weight="600" letter-spacing="-0.5">Arjun Sharma</text>
+    <text x="400" y="172" text-anchor="middle" fill="#6B6459" font-size="11">Demonstrated authorship and competency in</text>
+    <text x="400" y="190" text-anchor="middle" fill="#1C1912" font-size="11" font-weight="600" font-family="monospace">vishnu-k-dev / payment-service</text>
+    <rect x="188" y="202" width="424" height="1" fill="#E8E5DE"/>
+    <!-- Score panels -->
+    <rect x="136" y="214" width="154" height="70" rx="4" fill="#F5F2E9"/>
+    <text x="213" y="238" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">AUTHENTICITY</text>
+    <text x="213" y="270" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="30" font-weight="700">87</text>
+
+    <rect x="323" y="214" width="154" height="70" rx="4" fill="#F5F2E9"/>
+    <text x="400" y="238" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">OWNERSHIP</text>
+    <text x="400" y="270" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="30" font-weight="700">81</text>
+
+    <rect x="510" y="214" width="154" height="70" rx="4" fill="#F5F2E9"/>
+    <text x="587" y="238" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="1">COMPETENCY</text>
+    <text x="587" y="270" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="30" font-weight="700">84</text>
+
+    <!-- VERIFIED badge -->
+    <rect x="286" y="298" width="228" height="36" rx="4" fill="#1E6B45"/>
+    <text x="400" y="321" text-anchor="middle" fill="#fff" font-family="monospace" font-size="13" letter-spacing="4" font-weight="700">VERIFIED</text>
+
+    <rect x="148" y="346" width="504" height="1" fill="#E8E5DE"/>
+    <text x="268" y="364" fill="#8B8472" font-family="monospace" font-size="9">Verification ID</text>
+    <text x="268" y="380" fill="#1C1912" font-family="monospace" font-size="10" font-weight="600" letter-spacing="1">VRT-2026-A3F9C2BD</text>
+    <text x="268" y="394" fill="#8B8472" font-family="monospace" font-size="8">veritas-examination.vercel.app/verify/VRT-2026-A3F9C2BD</text>
+
+    <!-- Seal -->
+    <circle cx="634" cy="372" r="26" fill="none" stroke="#D4CFC2" stroke-width="1.5"/>
+    <circle cx="634" cy="372" r="20" fill="none" stroke="#E8E5DE" stroke-width="1"/>
+    <text x="634" y="378" text-anchor="middle" fill="#1E6B45" font-size="16">✓</text>
+
+    <!-- Bottom labels on dark bg -->
+    <text x="400" y="416" text-anchor="middle" fill="rgba(245,242,233,0.45)" font-family="monospace" font-size="10" letter-spacing="5">FAIR · SECURE · INTELLIGENT</text>
+    <text x="400" y="440" text-anchor="middle" fill="rgba(245,242,233,0.70)" font-family="monospace" font-size="15" letter-spacing="10" font-weight="600">VERITAS</text>
+  </svg>
+</div>
+
+<!-- SCENE 9 — ARCHITECTURE -->
+<div class="scene-wrap" id="s9">
+  <div class="scene-label">
+    <span>09 · How It Works</span>
+    <a class="download-btn" onclick="downloadSVG('s9','veritas-09-architecture')">↓ Save SVG</a>
+  </div>
+  <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="450" fill="#FDFCF8"/>
+    <rect x="0" y="0" width="800" height="4" fill="#8E2A1B"/>
+
+    <!-- Header -->
+    <text x="400" y="38" text-anchor="middle" fill="#1C1912" font-family="Georgia,serif" font-size="22" font-weight="600" letter-spacing="-0.3">How VERITAS Works</text>
+    <text x="400" y="58" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9" letter-spacing="2">FROM GITHUB URL TO VERIFIED CERTIFICATE</text>
+
+    <!--
+      Node centers: cx = 66, 198, 330, 462, 594, 726   cy = 152   r = 36
+      Circle bottom edge = cy + r = 188
+      Text row 1 (bold label) = 152 + 36 + 20 = 208
+      Text row 2 (sub)        = 208 + 16 = 224
+      Text row 3 (desc)       = 224 + 18 = 242
+    -->
+
+    <!-- Connectors: from cx+37 to cx_next-46, arrowhead at cx_next-37 -->
+    <line x1="103" y1="152" x2="151" y2="152" stroke="#D4CFC2" stroke-width="1.5"/>
+    <polygon points="151,147 161,152 151,157" fill="#D4CFC2"/>
+
+    <line x1="235" y1="152" x2="283" y2="152" stroke="#D4CFC2" stroke-width="1.5"/>
+    <polygon points="283,147 293,152 283,157" fill="#D4CFC2"/>
+
+    <line x1="367" y1="152" x2="415" y2="152" stroke="#D4CFC2" stroke-width="1.5"/>
+    <polygon points="415,147 425,152 415,157" fill="#D4CFC2"/>
+
+    <line x1="499" y1="152" x2="547" y2="152" stroke="#D4CFC2" stroke-width="1.5"/>
+    <polygon points="547,147 557,152 547,157" fill="#D4CFC2"/>
+
+    <line x1="631" y1="152" x2="679" y2="152" stroke="#D4CFC2" stroke-width="1.5"/>
+    <polygon points="679,147 689,152 679,157" fill="#D4CFC2"/>
+
+    <!-- NODE 1: GitHub Repo -->
+    <circle cx="66" cy="152" r="36" fill="#F5F2E9" stroke="#D4CFC2" stroke-width="1.5"/>
+    <circle cx="66" cy="142" r="12" fill="#1C1912"/>
+    <text x="66" y="147" text-anchor="middle" fill="#F5F2E9" font-family="monospace" font-size="10" font-weight="700">GH</text>
+    <text x="66" y="208" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700">GITHUB</text>
+    <text x="66" y="224" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9">REPO</text>
+    <text x="66" y="244" text-anchor="middle" fill="#9B9589" font-size="9">Public repo URL</text>
+
+    <!-- NODE 2: Repo Analysis -->
+    <circle cx="198" cy="152" r="36" fill="#F5F2E9" stroke="#D4CFC2" stroke-width="1.5"/>
+    <rect x="185" y="133" width="26" height="19" rx="2" fill="#1C1912"/>
+    <rect x="189" y="137" width="18" height="2" rx="1" fill="#F5F2E9" opacity="0.6"/>
+    <rect x="189" y="142" width="14" height="2" rx="1" fill="#F5F2E9" opacity="0.5"/>
+    <rect x="189" y="147" width="16" height="2" rx="1" fill="#8E2A1B"/>
+    <text x="198" y="208" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700">ANALYSIS</text>
+    <text x="198" y="224" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9">ZERO LLM</text>
+    <text x="198" y="244" text-anchor="middle" fill="#9B9589" font-size="9">Rule-based parser</text>
+
+    <!-- NODE 3: Vector Index -->
+    <circle cx="330" cy="152" r="36" fill="#EEE9FA" stroke="#C8C3E0" stroke-width="1.5"/>
+    <ellipse cx="330" cy="134" rx="11" ry="4" fill="#4F4380"/>
+    <rect x="319" y="134" width="22" height="13" fill="#4F4380"/>
+    <ellipse cx="330" cy="147" rx="11" ry="4" fill="#6B5FA8"/>
+    <text x="330" y="208" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700">VECTOR</text>
+    <text x="330" y="224" text-anchor="middle" fill="#4F4380" font-family="monospace" font-size="9">INDEX</text>
+    <text x="330" y="244" text-anchor="middle" fill="#9B9589" font-size="9">Cohere + pgvector</text>
+
+    <!-- NODE 4: Questions -->
+    <circle cx="462" cy="152" r="36" fill="#FDE8E4" stroke="#D4A8A0" stroke-width="1.5"/>
+    <rect x="448" y="130" width="28" height="20" rx="4" fill="#8E2A1B"/>
+    <polygon points="453,150 448,158 459,150" fill="#8E2A1B"/>
+    <text x="462" y="145" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">?</text>
+    <text x="462" y="208" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700">QUESTIONS</text>
+    <text x="462" y="224" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="9">FROM COMMITS</text>
+    <text x="462" y="244" text-anchor="middle" fill="#9B9589" font-size="9">Groq · Llama-3.3-70b</text>
+
+    <!-- NODE 5: Proctored Exam -->
+    <circle cx="594" cy="152" r="36" fill="#E8F5EC" stroke="#A8D4BA" stroke-width="1.5"/>
+    <rect x="582" y="143" width="24" height="16" rx="2" fill="#1E6B45"/>
+    <path d="M585 143 Q594 131 603 143" fill="none" stroke="#1E6B45" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="594" cy="151" r="3" fill="#fff"/>
+    <text x="594" y="208" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700">PROCTORED</text>
+    <text x="594" y="224" text-anchor="middle" fill="#1E6B45" font-family="monospace" font-size="9">EXAM</text>
+    <text x="594" y="244" text-anchor="middle" fill="#9B9589" font-size="9">7 browser signals</text>
+
+    <!-- NODE 6: Certificate -->
+    <circle cx="726" cy="152" r="36" fill="#F5F2E9" stroke="#D4CFC2" stroke-width="1.5"/>
+    <circle cx="726" cy="142" r="14" fill="none" stroke="#1E6B45" stroke-width="2"/>
+    <circle cx="726" cy="142" r="9" fill="none" stroke="#D4CFC2" stroke-width="1"/>
+    <text x="726" y="147" text-anchor="middle" fill="#1E6B45" font-size="15" font-weight="700">✓</text>
+    <text x="726" y="208" text-anchor="middle" fill="#1C1912" font-family="monospace" font-size="11" font-weight="700">CERTIFICATE</text>
+    <text x="726" y="224" text-anchor="middle" fill="#8B8472" font-family="monospace" font-size="9">VRT-2026-XXXX</text>
+    <text x="726" y="244" text-anchor="middle" fill="#9B9589" font-size="9">Public · Shareable</text>
+
+    <!-- Divider -->
+    <rect x="60" y="264" width="680" height="1" fill="#E0DDD5"/>
+
+    <!-- Three pillars -->
+    <rect x="60" y="278" width="208" height="72" rx="4" fill="#FDE8E4"/>
+    <text x="164" y="304" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="12" font-weight="700" letter-spacing="1">FAIR</text>
+    <text x="164" y="322" text-anchor="middle" fill="#6B6459" font-size="10">Questions from your own commits.</text>
+    <text x="164" y="338" text-anchor="middle" fill="#6B6459" font-size="10">No question bank to leak.</text>
+
+    <rect x="296" y="278" width="208" height="72" rx="4" fill="#E8F5EC"/>
+    <text x="400" y="304" text-anchor="middle" fill="#1E6B45" font-family="monospace" font-size="12" font-weight="700" letter-spacing="1">SECURE</text>
+    <text x="400" y="322" text-anchor="middle" fill="#6B6459" font-size="10">Paste blocked. Tab switches logged.</text>
+    <text x="400" y="338" text-anchor="middle" fill="#6B6459" font-size="10">AI patterns detected. No extensions.</text>
+
+    <rect x="532" y="278" width="208" height="72" rx="4" fill="#EEE9FA"/>
+    <text x="636" y="304" text-anchor="middle" fill="#4F4380" font-family="monospace" font-size="12" font-weight="700" letter-spacing="1">INTELLIGENT</text>
+    <text x="636" y="322" text-anchor="middle" fill="#6B6459" font-size="10">Asks WHY, not WHAT.</text>
+    <text x="636" y="338" text-anchor="middle" fill="#6B6459" font-size="10">Scores on specificity + reasoning.</text>
+
+    <!-- Bottom bar -->
+    <rect x="0" y="394" width="800" height="56" fill="#F0EDE6"/>
+    <rect x="0" y="393" width="800" height="2" fill="#D4CFC2"/>
+    <text x="400" y="420" text-anchor="middle" fill="#8E2A1B" font-family="monospace" font-size="11" font-weight="700" letter-spacing="2">VERITAS</text>
+    <text x="400" y="438" text-anchor="middle" fill="#6B6459" font-family="monospace" font-size="9">veritas-examination.vercel.app</text>
+  </svg>
+</div>
+
+<script>
+function downloadSVG(sceneId, filename) {
+  const svg = document.querySelector('#' + sceneId + ' svg');
+  const svgData = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([svgData], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename + '.svg';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

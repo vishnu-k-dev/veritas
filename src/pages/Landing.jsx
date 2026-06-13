@@ -89,6 +89,27 @@ const LANDING_CSS = `
 .land-root .btn-paper { background: var(--bg); color: var(--text); border: none; }
 .land-root .btn-paper:hover { background: #fff; }
 
+/* hero CTA — the one thing the judge should click */
+.land-root .btn-hero {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-ui); font-size: 17px; font-weight: 600;
+  letter-spacing: 0.01em; padding: 18px 40px;
+  border-radius: 2px; border: none;
+  background: var(--accent); color: #FDFCF8;
+  cursor: pointer;
+  transition: background 0.16s, transform 0.12s, box-shadow 0.16s;
+  box-shadow: 0 2px 0 var(--accent-deep), 0 8px 32px rgba(142,42,27,0.22);
+  white-space: nowrap;
+}
+.land-root .btn-hero:hover {
+  background: var(--accent-deep);
+  box-shadow: 0 2px 0 #4E1509, 0 12px 40px rgba(142,42,27,0.30);
+  transform: translateY(-1px);
+}
+.land-root .btn-hero:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--accent-deep); }
+.land-root .btn-hero .arr { font-size: 20px; transition: transform 0.18s ease; line-height: 1; }
+.land-root .btn-hero:hover .arr { transform: translateX(5px); }
+
 /* wrap */
 .land-root .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
 
@@ -452,8 +473,8 @@ export default function Landing({ onGetStarted }) {
                                     VERITAS reads a candidate's real work — a repository, a paper, a portfolio — builds a personalised examination from it, conducts an adaptive written viva, and issues a verifiable, evidence-backed report institutions can trust.
                                 </p>
                                 <div className="hero-ctas">
-                                    <button className="btn btn-primary" onClick={() => window.location.href = '/exam'}>
-                                        Start examination
+                                    <button className="btn-hero" onClick={() => window.location.href = '/exam'}>
+                                        Start examination <span className="arr">→</span>
                                     </button>
                                 </div>
                             </div>

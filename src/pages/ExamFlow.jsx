@@ -634,15 +634,9 @@ export default function ExamFlow() {
                 <div className="bpc-val" style={{ fontFamily: 'var(--fd)', fontSize: 28, fontWeight: 500 }}>{repoCtx.fileCount || 0}</div>
               </div>
             </div>
-            <div className="ef-questions-preview">
-              <h3>Examination plan — {questions.length} questions</h3>
-              {questions.map((q, i) => (
-                <div key={q.id} className="ef-q-preview-row">
-                  <span className="ef-q-num">0{i + 1}</span>
-                  <span className={`ef-q-area ${q.area || 'depth'}`}>{(q.area || 'depth').replace(/_/g, ' ')}</span>
-                  <span className="ef-q-text">{q.question.slice(0, 100)}{q.question.length > 100 ? '…' : ''}</span>
-                </div>
-              ))}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28, fontFamily: 'var(--fm)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+              <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
+              {questions.length} questions prepared — revealed one at a time during the examination
             </div>
             <div style={{ background: 'rgba(142,42,27,0.05)', border: '1px solid rgba(142,42,27,0.15)', borderRadius: 2, padding: '12px 16px', marginBottom: 28, fontFamily: 'var(--fm)', fontSize: 10, letterSpacing: '0.1em', color: 'var(--accent)' }}>
               PROCTORED EXAM — Tab switching, copy-paste, and typing patterns are monitored and included in your integrity report.
